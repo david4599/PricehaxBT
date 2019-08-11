@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="?actionBarItemBackground"
+    android:enabled="false"
+    android:orientation="horizontal"
+    android:paddingRight="8.0dip">
+
+    <ImageView
+        android:id="@id/up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|left"
+        android:src="?homeAsUpIndicator"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|left"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@id/action_bar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@id/action_bar_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/abc_action_bar_subtitle_top_margin"
+            android:layout_marginBottom="@dimen/abc_action_bar_subtitle_bottom_margin"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>

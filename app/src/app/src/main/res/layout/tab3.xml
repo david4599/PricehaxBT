@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="50dp"
+    android:fillViewport="true">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/black"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@id/digit1"
+            android:layout_width="100.0dip"
+            android:layout_height="170.0dip"
+            android:layout_marginLeft="20.0dip"
+            android:layout_marginTop="16.0dip">
+
+            <ToggleButton
+                android:id="@id/seg0"
+                android:layout_width="65.0dip"
+                android:layout_height="20.0dip"
+                android:layout_marginLeft="12.0dip"
+                android:background="@drawable/checkhseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@id/seg1"
+                android:layout_width="20.0dip"
+                android:layout_height="65.0dip"
+                android:layout_marginLeft="70.0dip"
+                android:layout_marginTop="14.0dip"
+                android:background="@drawable/checkvseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@id/seg2"
+                android:layout_width="20.0dip"
+                android:layout_height="65.0dip"
+                android:layout_marginLeft="70.0dip"
+                android:layout_marginTop="84.0dip"
+                android:background="@drawable/checkvseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@id/seg3"
+                android:layout_width="65.0dip"
+                android:layout_height="20.0dip"
+                android:layout_marginLeft="12.0dip"
+                android:layout_marginTop="142.0dip"
+                android:background="@drawable/checkhseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@id/seg4"
+                android:layout_width="20.0dip"
+                android:layout_height="65.0dip"
+                android:layout_marginLeft="0.0dip"
+                android:layout_marginTop="84.0dip"
+                android:background="@drawable/checkvseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@id/seg5"
+                android:layout_width="20.0dip"
+                android:layout_height="65.0dip"
+                android:layout_marginTop="14.0dip"
+                android:background="@drawable/checkvseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@id/seg6"
+                android:layout_width="65.0dip"
+                android:layout_height="20.0dip"
+                android:layout_marginLeft="12.0dip"
+                android:layout_marginTop="71.0dip"
+                android:background="@drawable/checkhseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@id/digit2"
+            android:layout_width="100.0dip"
+            android:layout_height="170.0dip"
+            android:layout_marginTop="16.0dip"
+            android:layout_toRightOf="@id/digit1">
+
+            <ToggleButton
+                android:id="@id/seg7"
+                android:layout_width="65.0dip"
+                android:layout_height="20.0dip"
+                android:layout_marginLeft="12.0dip"
+                android:background="@drawable/checkhseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@id/seg8"
+                android:layout_width="20.0dip"
+                android:layout_height="65.0dip"
+                android:layout_marginLeft="70.0dip"
+                android:layout_marginTop="14.0dip"
+                android:background="@drawable/checkvseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@id/seg9"
+                android:layout_width="20.0dip"
+                android:layout_height="65.0dip"
+                android:layout_marginLeft="70.0dip"
+                android:layout_marginTop="84.0dip"
+                android:background="@drawable/checkvseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@id/seg10"
+                android:layout_width="65.0dip"
+                android:layout_height="20.0dip"
+                android:layout_marginLeft="12.0dip"
+                android:layout_marginTop="142.0dip"
+                android:background="@drawable/checkhseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@id/seg11"
+                android:layout_width="20.0dip"
+                android:layout_height="65.0dip"
+                android:layout_marginLeft="0.0dip"
+                android:layout_marginTop="84.0dip"
+                android:background="@drawable/checkvseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@id/seg12"
+                android:layout_width="20.0dip"
+                android:layout_height="65.0dip"
+                android:layout_marginTop="14.0dip"
+                android:background="@drawable/checkvseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@id/seg13"
+                android:layout_width="65.0dip"
+                android:layout_height="20.0dip"
+                android:layout_marginLeft="12.0dip"
+                android:layout_marginTop="71.0dip"
+                android:background="@drawable/checkhseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@id/digit3"
+            android:layout_width="100.0dip"
+            android:layout_height="170.0dip"
+            android:layout_marginTop="16.0dip"
+            android:layout_toRightOf="@id/digit2">
+
+            <ToggleButton
+                android:id="@id/seg14"
+                android:layout_width="65.0dip"
+                android:layout_height="20.0dip"
+                android:layout_marginLeft="12.0dip"
+                android:background="@drawable/checkhseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@id/seg15"
+                android:layout_width="20.0dip"
+                android:layout_height="65.0dip"
+                android:layout_marginLeft="70.0dip"
+                android:layout_marginTop="14.0dip"
+                android:background="@drawable/checkvseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@id/seg16"
+                android:layout_width="20.0dip"
+                android:layout_height="65.0dip"
+                android:layout_marginLeft="70.0dip"
+                android:layout_marginTop="84.0dip"
+                android:background="@drawable/checkvseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@id/seg17"
+                android:layout_width="65.0dip"
+                android:layout_height="20.0dip"
+                android:layout_marginLeft="12.0dip"
+                android:layout_marginTop="142.0dip"
+                android:background="@drawable/checkhseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@id/seg18"
+                android:layout_width="20.0dip"
+                android:layout_height="65.0dip"
+                android:layout_marginLeft="0.0dip"
+                android:layout_marginTop="84.0dip"
+                android:background="@drawable/checkvseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@id/seg19"
+                android:layout_width="20.0dip"
+                android:layout_height="65.0dip"
+                android:layout_marginTop="14.0dip"
+                android:background="@drawable/checkvseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+
+            <ToggleButton
+                android:id="@id/seg20"
+                android:layout_width="65.0dip"
+                android:layout_height="20.0dip"
+                android:layout_marginLeft="12.0dip"
+                android:layout_marginTop="71.0dip"
+                android:background="@drawable/checkhseg"
+                android:checked="false"
+                android:focusable="false"
+                android:focusableInTouchMode="true"
+                android:textOff=""
+                android:textOn="" />
+        </FrameLayout>
+
+        <Spinner
+            android:id="@id/spn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btnSetSegs"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24.0dip"
+            android:textColor="@color/textcolor"
+            android:textSize="25.0sp" />
+
+        <Button
+            android:id="@id/btnSetSegs"
+            android:layout_width="200.0dip"
+            android:layout_height="64.0dip"
+            android:layout_below="@id/digit3"
+            android:layout_centerHorizontal="true"
+            android:onClick="sendSegs"
+            android:text="Set segments"
+            android:textColor="@color/textcolor"
+            android:textSize="25.0sp" />
+    </RelativeLayout>
+</ScrollView>

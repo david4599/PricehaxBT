@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Base.AppCompat.Dialog" parent="@style/Theme.Base.AppCompat.DialogWhenLarge.Base" />
+    <style name="Theme.Base.AppCompat.Light.Dialog" parent="@style/Theme.Base.AppCompat.Light.DialogWhenLarge.Base" />
+</resources>

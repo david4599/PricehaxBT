@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="50dp"
+    android:fillViewport="true">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/black"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@id/txtvPageDur"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="28.0dip"
+            android:layout_marginLeft="20.0dip"
+            android:layout_marginTop="15.0dip"
+            android:text="Display duration:"
+            android:textColor="@color/textcolor"
+            android:textSize="16.0sp" />
+
+        <TextView
+            android:id="@id/txtvPageNum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/radgDurations"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="46.0dip"
+            android:layout_marginRight="55.0dip"
+            android:text="Page number:"
+            android:textColor="@color/textcolor"
+            android:textSize="16.0sp" />
+
+        <EditText
+            android:id="@id/etxtPage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@id/txtvPageNum"
+            android:layout_alignLeft="@id/txtvPageNum"
+            android:layout_alignTop="@id/radgDurations"
+            android:layout_marginLeft="20.0dip"
+            android:ems="2"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:inputType="numberDecimal"
+            android:text="1"
+            android:textColor="@color/textcolor"
+            android:textSize="20.0sp">
+
+            <requestFocus />
+        </EditText>
+
+        <RadioGroup
+            android:id="@id/radgDurations"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtvPageDur"
+            android:layout_alignLeft="@id/txtvPageDur"
+            android:layout_marginTop="16.0dip">
+
+            <RadioButton
+                android:id="@id/raddur1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="4s"
+                android:textColor="@color/textcolor" />
+
+            <RadioButton
+                android:id="@id/raddur2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="8s"
+                android:textColor="@color/textcolor" />
+
+            <RadioButton
+                android:id="@id/raddur3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="30s"
+                android:textColor="@color/textcolor" />
+
+            <RadioButton
+                android:id="@id/raddur4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="8m"
+                android:textColor="@color/textcolor" />
+
+            <RadioButton
+                android:id="@id/raddur5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="30m"
+                android:textColor="@color/textcolor" />
+
+            <RadioButton
+                android:id="@id/raddur6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1h"
+                android:textColor="@color/textcolor" />
+
+            <RadioButton
+                android:id="@id/raddur7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:text="1h30"
+                android:textColor="@color/textcolor" />
+
+            <RadioButton
+                android:id="@id/raddur8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Display debug infos"
+                android:textColor="@color/textcolor"
+                android:textSize="12.0sp" />
+
+            <RadioButton
+                android:id="@id/raddur9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="Hide debug infos"
+                android:textColor="@color/textcolor"
+                android:textSize="12.0sp" />
+
+            <RadioButton
+                android:id="@id/raddur10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SmartTag LED low flash *"
+                android:textColor="@color/textcolor"
+                android:textSize="12.0sp" />
+
+            <RadioButton
+                android:id="@id/raddur11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/chkrepeatdm"
+                android:layout_alignStart="@id/radgDurations"
+                android:layout_alignLeft="@id/radgDurations"
+                android:text="SmartTag LED high flash *"
+                android:textColor="@color/textcolor"
+                android:textSize="12.0sp" />
+        </RadioGroup>
+
+        <Button
+            android:id="@id/btnSetPage"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="120.0dip"
+            android:layout_height="70.0dip"
+            android:layout_below="@id/etxtPage"
+            android:layout_alignStart="@id/txtvPageNum"
+            android:layout_alignLeft="@id/txtvPageNum"
+            android:layout_marginTop="15.0dip"
+            android:layout_marginRight="0.0dip"
+            android:onClick="sendPage"
+            android:text="Set segment page"
+            android:textColor="@color/textcolor"
+            android:textSize="15.0sp" />
+
+        <Button
+            android:id="@id/button2"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="120.0dip"
+            android:layout_height="70.0dip"
+            android:layout_alignStart="@id/btnSetPage"
+            android:layout_alignLeft="@id/btnSetPage"
+            android:layout_alignBottom="@id/radgDurations"
+            android:layout_marginBottom="56.0dip"
+            android:onClick="sendDMPage"
+            android:text="Set DotMatrix page"
+            android:textColor="@color/textcolor"
+            android:textSize="15.0sp" />
+
+        <CheckBox
+            android:id="@id/chkrepeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btnSetPage"
+            android:layout_alignStart="@id/txtvPageNum"
+            android:layout_alignLeft="@id/txtvPageNum"
+            android:onClick="repeatSendPage"
+            android:text="Repeat"
+            android:textColor="@color/textcolor" />
+
+        <CheckBox
+            android:id="@id/chkrepeatdm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button2"
+            android:layout_alignStart="@id/chkrepeat"
+            android:layout_alignLeft="@id/chkrepeat"
+            android:layout_marginTop="-55.0dip"
+            android:checked="false"
+            android:onClick="repeatSendPageDM"
+            android:text="Repeat"
+            android:textColor="@color/textcolor" />
+
+        <TextView
+            android:id="@id/txtvledflash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/radgDurations"
+            android:layout_alignLeft="@id/txtvPageDur"
+            android:layout_alignRight="@id/button2"
+            android:layout_marginTop="16.0dip"
+            android:text="* Not working yet on some SmartTag ESLs"
+            android:textColor="@color/textcolor"
+            android:textSize="11.0sp" />
+
+        <TextView
+            android:id="@id/txtvledflash2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtvledflash"
+            android:layout_alignLeft="@id/txtvPageDur"
+            android:layout_alignRight="@id/button2"
+            android:layout_marginTop="6.0dip"
+            android:text="Use the 'Page number' field to define the number of times the LED will flash (0 = always)"
+            android:textColor="@color/textcolor"
+            android:textSize="11.0sp" />
+    </RelativeLayout>
+</ScrollView>

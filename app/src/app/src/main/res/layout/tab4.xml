@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:layout_marginBottom="50dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/black"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@id/eslinfo_serial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="8.0dip"
+            android:layout_marginTop="60.0dip"
+            android:text="ESL serial"
+            android:textColor="@color/textcolor" />
+
+        <TextView
+            android:id="@id/label_dbgbs"
+            android:layout_width="512.0dip"
+            android:layout_height="64.0dip"
+            android:layout_below="@id/eslinfo_serial"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="8.0dip"
+            android:layout_marginTop="8.0dip"
+            android:text="Segment bitstream: "
+            android:textColor="@color/textcolor" />
+
+        <CheckBox
+            android:id="@id/chk_donglever"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/label_dbgbs"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="25.0dip"
+            android:checked="true"
+            android:onClick="setdonglever"
+            android:text="Transmitter V2"
+            android:textColor="@color/textcolor"
+            android:visibility="gone"/>
+
+        <SeekBar
+            android:id="@id/sb"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/chk_donglever"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="16.0dip"
+            android:layout_marginTop="83.0dip"
+            android:layout_marginRight="16.0dip"
+            android:max="40"
+            android:textColor="@color/textcolor"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@id/tvvolume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/sb"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="8.0dip"
+            android:layout_marginBottom="41.0dip"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/textcolor"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="8.0dip"
+            android:layout_marginTop="8.0dip"
+            android:text="Debug info:"
+            android:textColor="@color/textcolor" />
+
+        <CheckBox
+            android:id="@id/chk_donglebt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/chk_donglever"
+            android:layout_alignRight="@id/chk_donglever"
+            android:checked="true"
+            android:onClick="setdonglever"
+            android:text="BT transmitter"
+            android:textColor="@color/textcolor"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@id/tvbtt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/chk_donglebt"
+            android:layout_centerHorizontal="true"
+            android:text="BT transmitter not found"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/textcolor" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pair BT Transmitter"
+            android:id="@+id/btnPairBT"
+            android:layout_below="@id/tvbtt"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp"
+            android:onClick="pairBTTransmitter"
+            android:textColor="@color/textcolor" />
+    </RelativeLayout>
+</ScrollView>

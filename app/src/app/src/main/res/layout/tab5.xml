@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="50dp"
+    android:fillViewport="true">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/black"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@id/label_lnotice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8.0dip"
+            android:text="LEGAL NOTICE (EN/FR)"
+            android:textColor="@color/textcolor"
+            android:textSize="25.0sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@id/label_lnen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/label_lnotice"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16.0dip"
+            android:gravity="center_horizontal"
+            android:padding="10.0dip"
+            android:text="Furrtek ( :3 ) will not assume any responsibility of any kind for damages and/or loss derived by an inadequate (illegal) usage of this software."
+            android:textColor="@color/textcolor"
+            android:textSize="10.0sp" />
+
+        <TextView
+            android:id="@id/label_lnfr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/label_lnen"
+            android:layout_alignLeft="@id/label_lnen"
+            android:gravity="center_horizontal"
+            android:padding="10.0dip"
+            android:text="Furrtek ( :3 ) ne pourra etre tenu responsable de dommages et/ou de pertes issues de l'utilisation inadequate (dans un but illegal) de ce logiciel."
+            android:textColor="@color/textcolor"
+            android:textSize="10.0sp" />
+
+        <TextView
+            android:id="@id/label_thankslist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/thanks"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="16.0dip"
+            android:gravity="center_horizontal"
+            android:text="Aoi, Deadbird, Dr.Windaube, Sigmounte, BiduleOhm, Virtualabs, LightSnivy"
+            android:textColor="@color/textcolor"
+            android:textSize="15.0sp" />
+
+        <TextView
+            android:id="@id/thanks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/label_lnfr"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24.0dip"
+            android:text="THANKS"
+            android:textColor="@color/textcolor"
+            android:textSize="25.0sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/label_thankslist"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="48.0dip"
+            android:gravity="center_horizontal"
+            android:text="Version 1.1 BT (17.0)"
+            android:textColor="@color/textcolor"
+            android:textSize="15.0sp" />
+
+        <TextView
+            android:id="@id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textView4"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:text="(david4599)"
+            android:textColor="@color/textcolor"
+            android:textSize="12.0sp" />
+    </RelativeLayout>
+</ScrollView>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="imgChoices">
+        <item>BURD !</item>
+        <item>Dolan</item>
+        <item>Gratuit</item>
+        <item>Holy shit</item>
+        <item>Link</item>
+        <item>Mah boi</item>
+        <item>Sanic</item>
+        <item>Trollface</item>
+    </string-array>
+    <string-array name="segChoices">
+        <item>000</item>
+        <item>^_^</item>
+        <item>.|..</item>
+        <item>LOL</item>
+    </string-array>
+</resources>

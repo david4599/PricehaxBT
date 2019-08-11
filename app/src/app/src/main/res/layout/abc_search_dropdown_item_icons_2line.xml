@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?searchResultListItemHeight"
+    android:paddingLeft="@dimen/abc_dropdownitem_text_padding_left"
+    android:paddingRight="4.0dip">
+
+    <ImageView
+        android:id="@android:id/icon1"
+        android:layout_width="@dimen/abc_dropdownitem_icon_width"
+        android:layout_height="48.0dip"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:scaleType="centerInside"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@id/edit_query"
+        android:layout_width="48.0dip"
+        android:layout_height="48.0dip"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:background="?searchViewEditQueryBackground"
+        android:scaleType="centerInside"
+        android:src="?searchViewEditQuery"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@android:id/icon2"
+        android:layout_width="48.0dip"
+        android:layout_height="48.0dip"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@id/edit_query"
+        android:scaleType="centerInside"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@android:id/text2"
+        style="?android:attr/dropDownItemStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="29.0dip"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@android:id/icon2"
+        android:layout_toRightOf="@android:id/icon1"
+        android:gravity="top"
+        android:paddingBottom="4.0dip"
+        android:singleLine="true"
+        android:textAppearance="?textAppearanceSearchResultSubtitle"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@android:id/text1"
+        style="?android:attr/dropDownItemStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@android:id/text2"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@android:id/icon2"
+        android:layout_toRightOf="@android:id/icon1"
+        android:singleLine="true"
+        android:textAppearance="?textAppearanceSearchResultTitle" />
+</RelativeLayout>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="50dp"
+    android:fillViewport="true">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/black"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@id/cameraPreview"
+            android:layout_width="256.0dip"
+            android:layout_height="192.0dip"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8.0dip"
+            android:onClick="doAutoFocusOnTouch"/>
+
+        <Button
+            android:id="@id/scan_button"
+            android:layout_width="200.0dip"
+            android:layout_height="50.0dip"
+            android:layout_below="@id/cameraPreview"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8.0dip"
+            android:text="Scan ESL barcode"
+            android:textColor="@color/textcolor" />
+
+        <LinearLayout
+            android:id="@id/llESLInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8.0dip"
+            android:layout_marginBottom="32.0dip"
+            android:orientation="vertical" />
+
+        <TextView
+            android:id="@id/eslinfo_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/eslinfo_barcode"
+            android:layout_toRightOf="@id/llESLInfo"
+            android:text="ESL type"
+            android:textColor="@color/textcolor"
+            android:textSize="16.0sp" />
+
+        <TextView
+            android:id="@id/eslinfo_barcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scan_button"
+            android:layout_toEndOf="@id/llESLInfo"
+            android:layout_toRightOf="@id/llESLInfo"
+            android:text="ESL barcode"
+            android:textColor="@color/textcolor"
+            android:textSize="10.0sp" />
+    </RelativeLayout>
+</ScrollView>

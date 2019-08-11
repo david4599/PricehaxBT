@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="50dp"
+    android:fillViewport="true">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@color/black"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="64.0dip"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15.0dip"
+            android:orientation="horizontal"
+            android:textColor="@color/textcolor">
+
+            <Spinner
+                android:id="@id/spnimg"
+                android:layout_width="120.0dip"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/btnSetSegs"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="24.0dip"
+                android:layout_marginRight="8.0dip"
+                android:layout_marginBottom="10.0dip"
+                android:background="#ff888888"
+                android:textColor="@color/textcolor"
+                android:textSize="25.0sp" />
+
+            <Button
+                android:id="@id/btnloadimg"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="90.0dip"
+                android:layout_height="64.0dip"
+                android:layout_below="@id/textView"
+                android:layout_toStartOf="@id/btnsendimg"
+                android:layout_toLeftOf="@id/btnsendimg"
+                android:onClick="launchBarDialog"
+                android:text="Choose image"
+                android:textColor="@color/textcolor"
+                android:textSize="18.0sp" />
+
+            <Button
+                android:id="@id/btnsendimg"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="80.0dip"
+                android:layout_height="64.0dip"
+                android:layout_above="@id/imgvbmp"
+                android:layout_alignEnd="@id/imgvbmp"
+                android:layout_alignRight="@id/imgvbmp"
+                android:onClick="convertImage"
+                android:text="Send image"
+                android:textColor="@color/textcolor"
+                android:textSize="18.0sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@id/imgvbmp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linearLayout"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16.0dip"
+            android:maxWidth="172.0dip"
+            android:maxHeight="72.0dip"
+            android:minWidth="172.0dip"
+            android:minHeight="72.0dip" />
+
+        <ProgressBar
+            android:id="@id/pgb1"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="256.0dip"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtwork"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4.0dip"
+            android:max="100"
+            android:progress="0"
+            android:textColor="@color/textcolor" />
+
+        <TextView
+            android:id="@id/txtwork"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/sb_nb_repeat"
+            android:layout_alignStart="@id/pgb1"
+            android:layout_alignLeft="@id/pgb1"
+            android:layout_marginTop="8.0dip"
+            android:text="Nothing to do..."
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/textcolor" />
+
+        <Button
+            android:id="@+id/button"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pgb1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="32dp"
+            android:onClick="sendDMKC"
+            android:text="Change key code \n (LOL)"
+            android:textColor="@color/textcolor"
+            android:visibility="gone" />
+
+
+        <CheckBox
+            android:id="@id/force_raw_sending_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imgvbmp"
+            android:layout_alignLeft="@id/linearLayout"
+            android:layout_marginTop="8.0dip"
+            android:checked="false"
+            android:onClick="setrawmode"
+            android:text="Force RAW sending mode (Slower !)"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/textcolor" />
+
+        <SeekBar
+            android:id="@id/sb_nb_repeat"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/force_raw_sending_mode"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="16.0dip"
+            android:layout_marginTop="53.0dip"
+            android:layout_marginRight="16.0dip"
+            android:max="9"
+            android:min="1"
+            android:textColor="@color/textcolor" />
+
+        <TextView
+            android:id="@id/tv_nb_repeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/sb_nb_repeat"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="8.0dip"
+            android:layout_marginBottom="41.0dip"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/textcolor" />
+    </RelativeLayout>
+</ScrollView>
