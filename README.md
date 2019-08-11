@@ -31,4 +31,5 @@ Working prototype of the ESL hack project of furrtek using Pricehax BT app, Ardu
 #
 
 Both furrtek and me, decline all responsability of any kind of issues related by an illegal use of this project.
+
 Copyright (c) furrtek 2014 - david4599 2019
