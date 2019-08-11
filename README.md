@@ -9,7 +9,7 @@ Working prototype of the ESL hack project of furrtek using Pricehax BT app, Ardu
 - Program the arduino nano with the sketch included
 - Install the android app, pair the dongle and enjoy :-)
 
-## Android app impovements
+## Android app improvements
 - Fixed some bugs and crashes
 - Added the ability to scroll if pages are greater than the height of the screen (especially in landscape mode)
 - Display Debug infos all the time
