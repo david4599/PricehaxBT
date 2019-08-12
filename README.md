@@ -12,7 +12,7 @@ Working prototype of the ESL hack project of furrtek using Pricehax BT app, Ardu
 ## Android app improvements
 - Fixed some bugs and crashes
 - Added the ability to scroll if pages are greater than the height of the screen (especially in landscape mode)
-- Display Debug infos all the time
+- Display debug infos all the time
 - Hide debug infos feature added
 - Ability to blink the green LED on ST ESLs (not working yet on some)
 - Start autofocus by touching the preview screen on "PLID Scan" tab
@@ -30,6 +30,6 @@ Working prototype of the ESL hack project of furrtek using Pricehax BT app, Ardu
 
 #
 
-Both furrtek and me, decline all responsability of any kind of issues related by an illegal use of this project.
+Both furrtek and me decline all responsability for any kind of issues related by an illegal use of this project.
 
 Copyright (c) furrtek 2014 - david4599 2019
