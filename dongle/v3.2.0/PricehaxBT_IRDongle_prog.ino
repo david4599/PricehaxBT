@@ -12,38 +12,12 @@
 #define LEDPIN 2
 
 #include <SoftwareSerial.h>
-#include <avr/power.h>
-#include <avr/sleep.h>
 
 SoftwareSerial BT(BT_RXPIN, BT_TXPIN);
 
 boolean sendframe = false;
-int r, cnt;
-uint8_t d;
-uint16_t pp, repeat = 0;
-byte data[54], datalength;
-volatile uint16_t codeptr;
-volatile uint8_t dcode[440];
-
-
-
-void conversion() { // Convert data to IR format
-    codeptr = (uint16_t) datalength * 8; // Get the total number of bits in the frame
-    unsigned int j = 0;
-    for (unsigned int i = 0; i < codeptr; i += 8) {
-        dcode[i]     = ((data[j] & B00000010) >> 1);
-        dcode[i + 1] = ((data[j] & B00000001));
-        dcode[i + 2] = ((data[j] & B00001000) >> 3);
-        dcode[i + 3] = ((data[j] & B00000100) >> 2);
-        dcode[i + 4] = ((data[j] & B00100000) >> 5);
-        dcode[i + 5] = ((data[j] & B00010000) >> 4);
-        dcode[i + 6] = ((data[j] & B10000000) >> 7);
-        dcode[i + 7] = ((data[j] & B01000000) >> 6);
-        j++;
-    }
-}
-
-
+uint8_t b, cnt, data[54], datalength;
+uint16_t s, sym_count, r, repeat = 0;
 
 void burst() { // Create 40us burst at around 1.25MHz
     for(int i = 0; i < 50; i++){
@@ -61,9 +35,8 @@ void getData() { // Get frames from Pricehax sent over Bluetooth
     if (BT.read() == 170) { // First byte sent is an ID to avoid unwanted values sent from the bluetooth module itself
         cnt = 0;
         
-        // Reset data and dcode arrays
+        // Reset data array
         memset(data, 0, sizeof(data));
-        memset(dcode, 0, sizeof(dcode));
         
         while (BT.available()) {
             if (cnt == 0) { // Read header data
@@ -93,13 +66,17 @@ void getData() { // Get frames from Pricehax sent over Bluetooth
 
 
 void IRSend() { // Send a frame following the IR protocol
+    sym_count = datalength << 2;
+    
     for (r = 0; r < (unsigned int) repeat; r++) {
-        for (pp = 0; pp < (codeptr - 1); pp += 2) {
+        for (s = 0; s < sym_count; s++) {
+            if ((s & 3) == 0) {
+                b = data[s >> 2];
+            }
             
             burst();
             
-            d = ((dcode[pp] << 1) + dcode[pp + 1]);
-            switch(d) {
+            switch(b & 3) {
                 case 0:
                     _delay_us(56);
                     break;
@@ -116,6 +93,8 @@ void IRSend() { // Send a frame following the IR protocol
                     _delay_us(178);
                     break;
             }
+
+            b >>= 2;
         }
         
         burst();
@@ -127,8 +106,8 @@ void IRSend() { // Send a frame following the IR protocol
 
 
 void setup() {
-    DDRD |= (1 << LEDPIN); // Define pin 2 as output
-    PORTD &= (0 << LEDPIN); // Set pin 2 to low state
+    DDRD |= (1 << LEDPIN); // Define led pin as output
+    PORTD &= (0 << LEDPIN); // Set led pin to low state
     
     BT.begin(57600);
 }
@@ -141,8 +120,6 @@ void loop() {
     }
 
     if (sendframe) {
-        conversion();
-        
         IRSend();
         
         BT.write("ACK"); // Send an answer to Pricehax once the frame is transmitted

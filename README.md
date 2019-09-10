@@ -1,5 +1,5 @@
 # Pricehax BT
-Working prototype of the ESL hack project of furrtek using Pricehax BT app, Arduino Nano board and HC-06 (or HC-05) module for bluetooth communication.
+Working prototype of the ESL hack project of furrtek (https://github.com/furrtek/PrecIR) using Pricehax BT app, Arduino Nano board and HC-06 (or HC-05) module for bluetooth communication.
 
 ![PricehaxBT](PricehaxBT.jpg)
 
@@ -7,12 +7,12 @@ Working prototype of the ESL hack project of furrtek using Pricehax BT app, Ardu
 - Create the dongle on breadboard following the schematic (or order the pcb and solder the components)
 - Using AT commands, change the name of the HC-05/HC-06 module to "PRICEHAX TX V3" and its baud rate to 57600bps (115200bps and more will not work because of the SoftwareSerial library usage that produces errors at those rates)
 - Program the arduino nano with the included sketch
-- Install the android app, pair the dongle and enjoy :-)
+- Install the android app, pair the dongle and enjoy ;-)
 
 ## Android app improvements
 - Fixed some bugs and crashes
 - Added the ability to scroll if pages are greater than the height of the screen (especially in landscape mode)
-- Display debug infos all the time
+- Display debug infos for 24h
 - Hide debug infos feature added
 - Ability to blink the green LED on ST ESLs (not working yet on some)
 - Start autofocus by touching the preview screen on "PLID Scan" tab
