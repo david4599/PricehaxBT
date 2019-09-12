@@ -1088,15 +1088,21 @@ public class MainActivity extends Activity {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                 if (this.mCamera == null) {
-                    this.autoFocusHandler = new Handler();
-                    this.mCamera = getCameraInstance();
-                    Parameters params = this.mCamera.getParameters();
-                    params.setPreviewSize(640, 480);
-                    this.mCamera.setParameters(params);
-                    this.mPreview = new CameraPreview(this, this.mCamera, this.previewCb, this.autoFocusCB);
-                    this.preview = (FrameLayout) findViewById(R.id.cameraPreview);
-                    this.preview.addView(this.mPreview);
-                    this.mCamera.autoFocus(MainActivity.this.autoFocusCB);
+                    try {
+                        this.autoFocusHandler = new Handler();
+                        this.mCamera = getCameraInstance();
+                        Parameters params = this.mCamera.getParameters();
+                        params.setPreviewSize(640, 480);
+                        this.mCamera.setParameters(params);
+                        this.mPreview = new CameraPreview(this, this.mCamera, this.previewCb, this.autoFocusCB);
+                        this.preview = (FrameLayout) findViewById(R.id.cameraPreview);
+                        this.preview.addView(this.mPreview);
+                        this.mCamera.autoFocus(MainActivity.this.autoFocusCB);
+                    }
+                    catch (RuntimeException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
         }

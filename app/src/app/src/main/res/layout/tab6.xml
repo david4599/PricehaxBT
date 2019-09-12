@@ -135,7 +135,6 @@
             android:layout_marginTop="53.0dip"
             android:layout_marginRight="16.0dip"
             android:max="9"
-            android:min="1"
             android:textColor="@color/textcolor" />
 
         <TextView
