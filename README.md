@@ -1,6 +1,8 @@
 # Pricehax BT
 Working prototype of the ESL hack project of furrtek (https://github.com/furrtek/PrecIR) using Pricehax BT app, Arduino Nano board and HC-06 (or HC-05) module for bluetooth communication.
 
+Videos about this project are archived in this [playlist](https://www.youtube.com/playlist?list=PLhEz48id1qqD27sRc73mDFfBpu_RcLxfZ) (most in French).
+
 ![PricehaxBT](PricehaxBT.jpg)
 
 ## Build
