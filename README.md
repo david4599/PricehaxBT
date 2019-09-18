@@ -3,7 +3,7 @@ Working prototype of the ESL hack project of furrtek (https://github.com/furrtek
 
 Videos about this project are archived in this [playlist](https://www.youtube.com/playlist?list=PLhEz48id1qqD27sRc73mDFfBpu_RcLxfZ) (most in French).
 
-![PricehaxBT](PricehaxBT.jpg)
+<img src="PricehaxBT.jpg" width="640" alt="PricehaxBT">
 
 ## Build
 - Create the dongle on breadboard following the schematic (or order the pcb and solder the components)
