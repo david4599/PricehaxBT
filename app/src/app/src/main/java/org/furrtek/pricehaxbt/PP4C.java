@@ -18,12 +18,18 @@ public class PP4C {
         Log.d("BT SEND", "SENDING DATA...");
         try {
             byte[] buffer = new byte[128];
-            MainActivity.outStream.write(tmp);
-            do {
-            } while (MainActivity.inStream.available() <= 0);
+            int timeout = 20;
 
-            int res = MainActivity.inStream.read(buffer);
-            Log.d("DATA", "Received:" + res);
+            do {
+                MainActivity.outStream.write(tmp);
+                do {
+                } while (MainActivity.inStream.available() <= 0);
+
+                int res = MainActivity.inStream.read(buffer);
+                timeout--;
+            } while (buffer[0] == (byte) 49 && timeout >= 0);
+
+
 
         } catch (IOException e) {
             e.printStackTrace();

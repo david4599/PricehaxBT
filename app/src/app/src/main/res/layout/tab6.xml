@@ -55,7 +55,6 @@
                 android:layout_above="@id/imgvbmp"
                 android:layout_alignEnd="@id/imgvbmp"
                 android:layout_alignRight="@id/imgvbmp"
-                android:onClick="convertImage"
                 android:text="Send image"
                 android:textColor="@color/textcolor"
                 android:textSize="18.0sp" />
@@ -134,7 +133,7 @@
             android:layout_marginLeft="16.0dip"
             android:layout_marginTop="53.0dip"
             android:layout_marginRight="16.0dip"
-            android:max="9"
+            android:max="4"
             android:textColor="@color/textcolor" />
 
         <TextView

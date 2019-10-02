@@ -12,11 +12,18 @@ Videos about this project are archived in this [playlist](https://www.youtube.co
 - Install the android app, pair the dongle and enjoy ;-)
 
 ## Android app improvements
+**Version 18.0**
+- Fixed ST HD150 and ST HD200 definition
+- Red (and yellow ?) ESLs are supported : https://youtu.be/0PFMIiDluDw
+- Improved Bluetooth transmission reliability : comparison of received checksum and calculated checksum by the dongle
+- Added the possibility to stop current image send
+
+**Version 17.0**
 - Fixed some bugs and crashes
 - Added the ability to scroll if pages are greater than the height of the screen (especially in landscape mode)
 - Display debug infos for 24h
 - Hide debug infos feature added
-- Ability to blink the green LED on ST ESLs (not working yet on some)
+- Ability to blink the green LED on ST ESLs (not working yet on some) : https://youtu.be/b0Rn40alxQg
 - Start autofocus by touching the preview screen on "PLID Scan" tab
 - ESL types added (mainly graphic ESLs, not tested on the most of them but it should work)
 - Automatically choose sending compressed or raw data to graphic ESLs

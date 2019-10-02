@@ -1,5 +1,5 @@
 /* 
- *  Pricehax BT IR dongle (for Pricehax Version 1.1 BT (17.0))
+ *  Pricehax BT IR dongle (for Pricehax Version 1.1 BT (18.0))
  *  furrtek 2014
  *  david4599 2019
  */
@@ -17,7 +17,30 @@ SoftwareSerial BT(BT_RXPIN, BT_TXPIN);
 
 boolean sendframe = false;
 uint8_t b, cnt, data[54], datalength;
-uint16_t s, sym_count, r, repeat = 0;
+uint16_t s, sym_count, r, repeat = 0, result, poly;
+
+
+
+void CRCCalc() {
+    result = 0x8408;
+    poly = 0x8408;
+    
+    for (int i = 0; i < datalength-2; i++) {
+        result ^= data[i];
+        
+        for (int j = 0; j < 8; j++) {
+            if (result & 1) {
+                result >>= 1;
+                result ^= poly;
+            }
+            else {
+                result >>= 1;
+            }
+        }
+    }
+}
+
+
 
 void burst() { // Create 40us burst at around 1.25MHz
     for(int i = 0; i < 50; i++){
@@ -37,6 +60,8 @@ void getData() { // Get frames from Pricehax sent over Bluetooth
         
         // Reset data array
         memset(data, 0, sizeof(data));
+        
+        _delay_ms(1);
         
         while (BT.available()) {
             if (cnt == 0) { // Read header data
@@ -58,7 +83,7 @@ void getData() { // Get frames from Pricehax sent over Bluetooth
             data[cnt] = (byte) BT.read(); // Get the next byte of the frame
             cnt++;
         }
-    
+        
         sendframe = true;
     }
 }
@@ -117,14 +142,20 @@ void setup() {
 void loop() {
     if (BT.available()) {
         getData();
+        CRCCalc();
+        
+        if (data[datalength-2] != (uint8_t) result || data[datalength-1] != (uint8_t) (result >> 8)) {
+            BT.write("1");
+            sendframe = false;
+        }
     }
 
     if (sendframe) {
         IRSend();
         
-        BT.write("ACK"); // Send an answer to Pricehax once the frame is transmitted
+        BT.write("0"); // Send an answer to Pricehax once the frame is transmitted
         sendframe = false;
     }
 
-    _delay_ms(2);
+    _delay_ms(1);
 }

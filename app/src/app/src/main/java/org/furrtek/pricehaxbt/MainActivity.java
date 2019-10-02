@@ -95,10 +95,19 @@ public class MainActivity extends Activity {
     int plBitDef;
     long plID;
     int ESLType = 0;
+    boolean ESLTypeColor = false;
+    boolean threadRunning = true;
+    int compression_type = 0;
+    int datalen = 0;
+    int padded_datalen = 0;
     FrameLayout preview;
     byte[] rawbitstream;
     Bitmap scaledimage;
+    Bitmap scaledimagepart1;
+    Bitmap scaledimagepart2;
+    List<Integer> compressed;
     Button scanButton;
+    Button btnsendimg;
     TextView scaneibarcode;
     TextView scaneiserial;
     TextView scaneitype;
@@ -113,6 +122,7 @@ public class MainActivity extends Activity {
     int wi;
     int x;
     int y;
+    int idx;
     int ymax;
     int nbRepeatFrame;
     String plHexString;
@@ -193,7 +203,7 @@ public class MainActivity extends Activity {
 
 
                         case 1291:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (FVL Promoline 3-16 (18619-00) segments bitmap not done !) NOT TESTED");
+                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (FVL Promoline 3-16 (18619-00) segments bitmap not done !)");
                             MainActivity.this.ESLType = 1;
                             break;
 
@@ -212,13 +222,13 @@ public class MainActivity extends Activity {
                             MainActivity.this.ESLType = 2;
                             break;
                         case 1276:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (DotMatrix DM90 320x140) NOT TESTED");
+                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (DotMatrix DM90 320x140) EXPERIMENTAL");
                             MainActivity.this.wi = 320;
                             MainActivity.this.hi = 140;
                             MainActivity.this.ESLType = 2;
                             break;
                         case 1275:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (DotMatrix DM110 320x192 (13400-00)) NOT TESTED");
+                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (DotMatrix DM110 320x192 (13400-00)) EXPERIMENTAL");
                             MainActivity.this.wi = 320;
                             MainActivity.this.hi = 192;
                             MainActivity.this.ESLType = 2;
@@ -233,10 +243,11 @@ public class MainActivity extends Activity {
                             MainActivity.this.ESLType = 2;
                             break;
                         case 1339:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD S Red 152x152) NOT TESTED");
+                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD S Red 152x152) EXPERIMENTAL");
                             MainActivity.this.wi = 152;
                             MainActivity.this.hi = 152;
                             MainActivity.this.ESLType = 2;
+                            MainActivity.this.ESLTypeColor = true;
                             break;
 
 
@@ -247,13 +258,14 @@ public class MainActivity extends Activity {
                             MainActivity.this.ESLType = 2;
                             break;
                         case 1327:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD M Red 208x112) NOT TESTED");
+                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD M Red 208x112)");
                             MainActivity.this.wi = 208;
                             MainActivity.this.hi = 112;
                             MainActivity.this.ESLType = 2;
+                            MainActivity.this.ESLTypeColor = true;
                             break;
                         case 1324:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD M FZ 208x112) NOT TESTED");
+                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD M FZ 208x112) EXPERIMENTAL");
                             MainActivity.this.wi = 208;
                             MainActivity.this.hi = 112;
                             MainActivity.this.ESLType = 2;
@@ -261,85 +273,93 @@ public class MainActivity extends Activity {
 
 
                         case 1315:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L 296x128) NOT TESTED");
+                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L 296x128) EXPERIMENTAL");
                             MainActivity.this.wi = 296;
                             MainActivity.this.hi = 128;
                             MainActivity.this.ESLType = 2;
                             break;
                         case 1328:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L Red 296x128) NOT TESTED");
+                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L Red 296x128) EXPERIMENTAL");
                             MainActivity.this.wi = 296;
                             MainActivity.this.hi = 128;
                             MainActivity.this.ESLType = 2;
+                            MainActivity.this.ESLTypeColor = true;
                             break;
                         case 1344:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L Yellow 296x128) NOT TESTED");
+                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L Yellow 296x128) EXPERIMENTAL");
                             MainActivity.this.wi = 296;
                             MainActivity.this.hi = 128;
                             MainActivity.this.ESLType = 2;
+                            MainActivity.this.ESLTypeColor = true;
                             break;
 
 
                         case 1348:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD T Red 296x128) NOT TESTED");
+                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD T Red 296x128) EXPERIMENTAL");
                             MainActivity.this.wi = 264;
                             MainActivity.this.hi = 176;
                             MainActivity.this.ESLType = 2;
+                            MainActivity.this.ESLTypeColor = true;
                             break;
                         case 1349:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD T Yellow 296x128) NOT TESTED");
+                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD T Yellow 296x128) EXPERIMENTAL");
                             MainActivity.this.wi = 264;
                             MainActivity.this.hi = 176;
                             MainActivity.this.ESLType = 2;
+                            MainActivity.this.ESLTypeColor = true;
                             break;
 
 
                         case 1314:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD110 400x300) NOT TESTED");
+                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD110 400x300) EXPERIMENTAL");
                             MainActivity.this.wi = 400;
                             MainActivity.this.hi = 300;
                             MainActivity.this.ESLType = 2;
                             break;
                         case 1336:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD110 Red 400x300) NOT TESTED");
+                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD110 Red 400x300) EXPERIMENTAL");
                             MainActivity.this.wi = 400;
                             MainActivity.this.hi = 300;
                             MainActivity.this.ESLType = 2;
+                            MainActivity.this.ESLTypeColor = true;
                             break;
 
 
                         case 1351:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD150 600x448) NOT TESTED");
-                            MainActivity.this.wi = 600;
-                            MainActivity.this.hi = 448;
+                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD150 648x480) EXPERIMENTAL");
+                            MainActivity.this.wi = 648;
+                            MainActivity.this.hi = 480;
                             MainActivity.this.ESLType = 2;
                             break;
                         case 1353:
                         case 1354:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD150 Red 600x448) NOT TESTED");
-                            MainActivity.this.wi = 600;
-                            MainActivity.this.hi = 448;
+                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD150 Red 648x480)");
+                            MainActivity.this.wi = 648;
+                            MainActivity.this.hi = 480;
                             MainActivity.this.ESLType = 2;
+                            MainActivity.this.ESLTypeColor = true;
                             break;
 
 
                         case 1319:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD200 640x384) NOT TESTED");
-                            MainActivity.this.wi = 640;
-                            MainActivity.this.hi = 384;
+                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD200 800x480) EXPERIMENTAL");
+                            MainActivity.this.wi = 800;
+                            MainActivity.this.hi = 480;
                             MainActivity.this.ESLType = 2;
                             break;
                         case 1340:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD200 Red 640x384) NOT TESTED");
-                            MainActivity.this.wi = 640;
-                            MainActivity.this.hi = 384;
+                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD200 Red 800x480) EXPERIMENTAL");
+                            MainActivity.this.wi = 800;
+                            MainActivity.this.hi = 480;
                             MainActivity.this.ESLType = 2;
+                            MainActivity.this.ESLTypeColor = true;
                             break;
                         case 1346:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD200 Yellow 640x384) NOT TESTED");
-                            MainActivity.this.wi = 640;
-                            MainActivity.this.hi = 384;
+                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD200 Yellow 800x480) EXPERIMENTAL");
+                            MainActivity.this.wi = 800;
+                            MainActivity.this.hi = 480;
                             MainActivity.this.ESLType = 2;
+                            MainActivity.this.ESLTypeColor = true;
                             break;
 
                         default:
@@ -472,24 +492,457 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void convertImage(View view) {
-        if (!isDonglePaired()) {
-            return;
-        }
-        if (MainActivity.this.ESLType != 2) {
-            if (MainActivity.this.ESLType == 0) {
-                Toast.makeText(MainActivity.this, "ESL barcode not scanned !", Toast.LENGTH_LONG).show();
+
+
+
+    private void convertMonochrome(Bitmap image, boolean color) {
+        MainActivity mainActivity;
+        MainActivity.this.y = 0;
+        int w = image.getWidth();
+        int h = image.getHeight();
+        final int width = w;
+        while (MainActivity.this.y < h) {
+            MainActivity.this.x = 0;
+            while (MainActivity.this.x < w) {
+                int pixel = image.getPixel(MainActivity.this.x, MainActivity.this.y);
+                if (!color) {
+                    if (((int) (((0.299d * ((double) Color.red(pixel))) + (0.587d * ((double) Color.green(pixel)))) + (0.114d * ((double) Color.blue(pixel))))) < 128) {
+                        MainActivity.this.rawbitstream[MainActivity.this.idx] = (byte) 0;
+                    } else {
+                        MainActivity.this.rawbitstream[MainActivity.this.idx] = (byte) 1;
+                    }
+                }
+                else {
+                    if (((int) ((double) Color.red(pixel))) >= 80 && ((int) ((double) Color.green(pixel))) < 80 && ((int) ((double) Color.blue(pixel))) < 80) {
+                        MainActivity.this.rawbitstream[MainActivity.this.idx] = (byte) 0;
+                    } else {
+                        MainActivity.this.rawbitstream[MainActivity.this.idx] = (byte) 1;
+                    }
+                }
+
+                mainActivity = MainActivity.this;
+                mainActivity.x++;
+                MainActivity.this.idx++;
+            }
+
+            MainActivity.this.handler.post(new Runnable() {
+                public void run() {
+                    MainActivity.this.pgb.setProgress((MainActivity.this.y * 36) / width);
+                }
+            });
+            if (!color) {
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        MainActivity.this.txtworkh.setText("Converting to monochrome: line " + MainActivity.this.y);
+                    }
+                });
             }
             else {
-                Toast.makeText(MainActivity.this, "Incompatible ESL type !", Toast.LENGTH_LONG).show();
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    public void run() {
+                        MainActivity.this.txtworkh.setText("Converting to monochrome color: line " + MainActivity.this.y);
+                    }
+                });
             }
-            return;
+
+            try {
+                Thread.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            mainActivity = MainActivity.this;
+            mainActivity.y++;
+
+            if (!threadRunning) {
+                MainActivity.this.handler.post(new Runnable() {
+                    public void run() {
+                        MainActivity.this.pgb.setProgress(100);
+                        MainActivity.this.txtworkh.setText("Stopped successfully !");
+                    }
+                });
+
+                return;
+            }
         }
+    }
+
+
+
+
+    private void RLECompress() {
+        MainActivity mainActivity;
+        int j = MainActivity.this.idx - 1;
+        int cnt = 1;
+        byte p = MainActivity.this.rawbitstream[0];
+        MainActivity.this.y = 0;
+
+        MainActivity.this.runOnUiThread(new Runnable() {
+            public void run() {
+                MainActivity.this.txtworkh.setText("RLE compress...");
+            }
+        });
+        int m = 1;
+        while (m <= j) {
+            byte n = MainActivity.this.rawbitstream[m];
+            if (n == p) {
+                cnt++;
+
+                if (m == j - 1) {
+                    MainActivity.this.compressed.add(Integer.valueOf(cnt));
+                }
+            } else {
+                MainActivity.this.compressed.add(Integer.valueOf(cnt));
+                cnt = 1;
+                if (m == j - 1) {
+                    MainActivity.this.compressed.add(Integer.valueOf(1));
+                }
+            }
+            p = n;
+            if ((m & 31) == 0) {
+                MainActivity.this.handler.post(new Runnable() {
+                    public void run() {
+                        MainActivity.this.pgb.setProgress((MainActivity.this.y / 1238) + 36);
+                    }
+                });
+            }
+            m++;
+            mainActivity = MainActivity.this;
+            mainActivity.y++;
+
+            if (!threadRunning) return;
+        }
+    }
+
+
+    private void Hexadecimalifying(StringBuilder bstr_raw, StringBuilder bstr_compressed) {
+        MainActivity.this.runOnUiThread(new Runnable() {
+            public void run() {
+                MainActivity.this.txtworkh.setText("Hexadecimalifying...");
+            }
+        });
+
+        // "rawbitstream" to StringBuilder
+        for (int countbit = 0; countbit < MainActivity.this.rawbitstream.length; countbit++) {
+            Integer intValue = (int) MainActivity.this.rawbitstream[countbit];
+            String bs = Integer.toBinaryString(intValue.intValue());
+            bstr_raw.append(bs);
+        }
+
+
+        // "compressed" to StringBuilder
+        bstr_compressed.append(MainActivity.this.rawbitstream[0]);
+        for (Integer intValue : MainActivity.this.compressed) {
+            int bsc;
+            String bs = Integer.toBinaryString(intValue.intValue());
+            StringBuffer stringBuffer = new StringBuffer(bs.length());
+            for (bsc = 0; bsc < bs.length() - 1; bsc++) {
+                stringBuffer.append("0");
+            }
+            bstr_compressed.append(stringBuffer.toString());
+            bstr_compressed.append(bs);
+        }
+    }
+
+
+
+
+
+    private List<Byte> createCompressedHexList(StringBuilder bstr_compressed) {
+        compression_type = 2;
+
+        List<Byte> hexlist;
+        int klp = bstr_compressed.toString().length() % 320;
+        if (klp > 0) {
+            klp = 320 - klp;
+        }
+        for (int bsc = 0; bsc < klp; bsc++) {
+            bstr_compressed.append("0");
+        }
+
+        String bstr_compressed_string = bstr_compressed.toString();
+        hexlist = new ArrayList<Byte>();
+        for (int bsc = 0; bsc < bstr_compressed_string.length(); bsc += 8) {
+            hexlist.add(Byte.valueOf((byte) Integer.parseInt(bstr_compressed_string.substring(bsc, bsc + 8), 2)));
+        }
+
+        datalen = hexlist.size();
+        padded_datalen = hexlist.size();
+
+        return hexlist;
+    }
+
+
+
+
+    private List<Byte> createRawHexList(StringBuilder bstr_raw) {
+        compression_type = 0;
+
+        List<Byte> hexlist;
+        String bstr_raw_string = bstr_raw.toString();
+        hexlist = new ArrayList<Byte>();
+        for (int bsc = 0; bsc < bstr_raw_string.length(); bsc += 8) {
+            hexlist.add(Byte.valueOf((byte) Integer.parseInt(bstr_raw_string.substring(bsc, bsc + 8), 2)));
+        }
+
+        datalen = hexlist.size();
+
+
+        int klp = bstr_raw.toString().length() % 320;
+        if (klp > 0) {
+            klp = 320 - klp;
+        }
+        for (int bsc = 0; bsc < klp; bsc++) {
+            bstr_raw.append("0");
+        }
+
+        bstr_raw_string = bstr_raw.toString();
+        hexlist = new ArrayList<Byte>();
+        for (int bsc = 0; bsc < bstr_raw_string.length(); bsc += 8) {
+            hexlist.add(Byte.valueOf((byte) Integer.parseInt(bstr_raw_string.substring(bsc, bsc + 8), 2)));
+        }
+
+        padded_datalen = hexlist.size();
+
+        return hexlist;
+    }
+
+
+
+
+
+
+
+
+    private void sendPingCode() {
+        MainActivity.audioTrack = new AudioTrack(3, 48000, 4, 2, 48000, 1);
+        byte[] pingcode = new byte[]{(byte) -123, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) -105, (byte) 1, (byte) 0, (byte) 0, (byte) 0, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1};
+        pingcode[1] = (byte) ((int) (MainActivity.this.plID & 255));
+        pingcode[2] = (byte) ((int) (MainActivity.this.plID >> 8));
+        pingcode[3] = (byte) ((int) (MainActivity.this.plID >> 16));
+        pingcode[4] = (byte) ((int) (MainActivity.this.plID >> 24));
+        byte[] FrameCRC = CRCCalc.GetCRC(pingcode, 30);
+        pingcode[30] = FrameCRC[0];
+        pingcode[31] = FrameCRC[1];
+
+        if (!threadRunning) return;
+        MainActivity.this.runOnUiThread(new Runnable() {
+            public void run() {
+                MainActivity.this.txtworkh.setText("Waking up ESL...");
+            }
+        });
+        PP4C.sendPP4C(MainActivity.this.at.getApplicationContext(), pingcode, 32, MainActivity.this.donglever, 50, MainActivity.audioTrack, 250);
+        if (MainActivity.this.donglever == 2) {
+            SystemClock.sleep(2500);
+        } else if (MainActivity.this.donglever == 1) {
+            SystemClock.sleep(1800);
+            PP4C.sendPP4C(MainActivity.this.at.getApplicationContext(), pingcode, 32, MainActivity.this.donglever, 35, MainActivity.audioTrack, 0);
+            SystemClock.sleep(1800);
+            PP4C.sendPP4C(MainActivity.this.at.getApplicationContext(), pingcode, 32, MainActivity.this.donglever, 35, MainActivity.audioTrack, 0);
+            SystemClock.sleep(1800);
+        }
+    }
+
+
+
+
+    private void sendStartCode(int part) {
+        byte[] startcode = new byte[54];
+        startcode[0] = (byte) -123;
+        startcode[1] = (byte) ((int) (MainActivity.this.plID & 255));
+        startcode[2] = (byte) ((int) (MainActivity.this.plID >> 8));
+        startcode[3] = (byte) ((int) (MainActivity.this.plID >> 16));
+        startcode[4] = (byte) ((int) (MainActivity.this.plID >> 24));
+        startcode[5] = (byte) 52;
+        startcode[6] = (byte) 0;
+        startcode[7] = (byte) 0;
+        startcode[8] = (byte) 0;
+        startcode[9] = (byte) 5;
+        startcode[10] = (byte) (datalen >> 8);
+        startcode[11] = (byte) (datalen & MotionEventCompat.ACTION_MASK);
+        byte[] bArr = new byte[20];
+        if (part == 0) {
+            bArr = new byte[]{(byte) 0, (byte) compression_type, (byte) 2, (byte) (MainActivity.this.wi >> 8), (byte) (MainActivity.this.wi & 255), (byte) (MainActivity.this.hi >> 8), (byte) (MainActivity.this.hi & 255), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) -120, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0};
+        }
+        else if (part == 1) {
+            bArr = new byte[]{(byte) 0, (byte) compression_type, (byte) 2, (byte) (MainActivity.this.wi >> 8), (byte) (MainActivity.this.wi & 255), (byte) ((MainActivity.this.hi/2) >> 8), (byte) ((MainActivity.this.hi/2) & 255), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) -120, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0};
+        }
+        else if (part == 2) {
+            bArr = new byte[]{(byte) 0, (byte) compression_type, (byte) 2, (byte) (MainActivity.this.wi >> 8), (byte) (MainActivity.this.wi & 255), (byte) ((MainActivity.this.hi/2) >> 8), (byte) ((MainActivity.this.hi/2) & 255), (byte) 0, (byte) 0, (byte) ((MainActivity.this.hi/2) >> 8), (byte) ((MainActivity.this.hi/2) & 255), (byte) 0, (byte) 0, (byte) -120, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0};
+        }
+
+        for (int cp = 0; cp < 20; cp++) {
+            startcode[cp + 12] = bArr[cp];
+        }
+
+        byte[] FrameCRC = CRCCalc.GetCRC(startcode, 32);
+        startcode[32] = FrameCRC[0];
+        startcode[33] = FrameCRC[1];
+
+        if (!threadRunning) return;
+        MainActivity.this.runOnUiThread(new Runnable() {
+            public void run() {
+                MainActivity.this.txtworkh.setText("Start frame...");
+            }
+        });
+        PP4C.sendPP4C(MainActivity.this.at.getApplicationContext(), startcode, 34, MainActivity.this.donglever, 6, MainActivity.audioTrack, 10);
+        if (MainActivity.this.donglever == 2) {
+            SystemClock.sleep(1000);
+        }
+        if (MainActivity.this.donglever == 1) {
+            SystemClock.sleep(1600);
+        }
+    }
+
+
+
+
+
+    private void sendFrame(List<Byte> hexlist, int numframe) {
+        byte[] startcode = new byte[54];
+        startcode[0] = (byte) -123;
+        startcode[1] = (byte) ((int) (MainActivity.this.plID & 255));
+        startcode[2] = (byte) ((int) (MainActivity.this.plID >> 8));
+        startcode[3] = (byte) ((int) (MainActivity.this.plID >> 16));
+        startcode[4] = (byte) ((int) (MainActivity.this.plID >> 24));
+        startcode[5] = (byte) 52;
+        startcode[6] = (byte) 0;
+        startcode[7] = (byte) 0;
+        startcode[8] = (byte) 0;
+        startcode[9] = (byte) 32;
+        startcode[10] = (byte) (numframe >> 8);
+        startcode[11] = (byte) (numframe & MotionEventCompat.ACTION_MASK);
+        for (int cp = 0; cp < 40; cp++) {
+            startcode[cp + 12] = ((Byte) hexlist.get((numframe * 40) + cp)).byteValue();
+        }
+        byte[] FrameCRC = CRCCalc.GetCRC(startcode, 52);
+        startcode[52] = FrameCRC[0];
+        startcode[53] = FrameCRC[1];
+
+        if (!threadRunning) return;
+        MainActivity.this.runOnUiThread(new Runnable() {
+            public void run() {
+                MainActivity.this.txtworkh.setText("Data frame " + MainActivity.this.y + "/" + MainActivity.this.ymax);
+            }
+        });
+        PP4C.sendPP4C(MainActivity.this.at.getApplicationContext(), startcode, 54, MainActivity.this.donglever, 1, MainActivity.audioTrack, MainActivity.this.nbRepeatFrame);
+        if (MainActivity.this.donglever == 2) {
+            SystemClock.sleep(550);
+        }
+        if (MainActivity.this.donglever == 1) {
+            SystemClock.sleep(1800);
+        }
+    }
+
+
+
+
+
+
+    private void sendVerifCode() {
+        byte[] vercode = new byte[]{(byte) -123, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 52, (byte) 0, (byte) 0, (byte) 0, (byte) 1, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0};
+        vercode[1] = (byte) ((int) (MainActivity.this.plID & 255));
+        vercode[2] = (byte) ((int) (MainActivity.this.plID >> 8));
+        vercode[3] = (byte) ((int) (MainActivity.this.plID >> 16));
+        vercode[4] = (byte) ((int) (MainActivity.this.plID >> 24));
+        byte[] FrameCRC = CRCCalc.GetCRC(vercode, 28);
+        vercode[28] = FrameCRC[0];
+        vercode[29] = FrameCRC[1];
+
+        if (!threadRunning) return;
+        MainActivity.this.runOnUiThread(new Runnable() {
+            public void run() {
+                MainActivity.this.txtworkh.setText("Verify frame...");
+            }
+        });
+        PP4C.sendPP4C(MainActivity.this.at.getApplicationContext(), vercode, 30, MainActivity.this.donglever, 10, MainActivity.audioTrack, 50);
+        if (MainActivity.this.donglever != 3) {
+            SystemClock.sleep(2000);
+        }
+    }
+
+
+
+
+    private void sendImage(Bitmap image, int size_raw, int imagePart) {
+        MainActivity mainActivity;
+        int size_compressed;
+        List<Byte> hexlist;
+
+        MainActivity.this.idx = 0;
+        MainActivity.this.compressed = new ArrayList<Integer>();
+
+        StringBuilder bstr_raw = new StringBuilder();
+        StringBuilder bstr_compressed = new StringBuilder();
+
+
+        convertMonochrome(image, false);
+        if (!threadRunning) return;
+
+        if (MainActivity.this.ESLTypeColor) {
+            convertMonochrome(image, true);
+            if (!threadRunning) return;
+        }
+
+
+        RLECompress();
+        if (!threadRunning) return;
+
+
+        Hexadecimalifying(bstr_raw, bstr_compressed);
+
+        size_compressed = bstr_compressed.toString().length();
+        if (size_compressed < size_raw && rawmode == 0) { // Compressed data mode
+            hexlist = createCompressedHexList(bstr_compressed);
+        }
+        else { // raw data mode
+            hexlist = createRawHexList(bstr_raw);
+        }
+
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e22) {
+            e22.printStackTrace();
+        }
+        MainActivity.this.handler.post(new Runnable() {
+            public void run() {
+                MainActivity.this.pgb.setProgress(MainActivity.SELECT_PHOTO);
+            }
+        });
+
+
+
+        sendPingCode();
+        if (!threadRunning) return;
+
+        sendStartCode(imagePart);
+        if (!threadRunning) return;
+
+        MainActivity.this.ymax = padded_datalen / 40;
+        MainActivity.this.y = 0;
+        while (MainActivity.this.y < MainActivity.this.ymax) {
+            sendFrame(hexlist, MainActivity.this.y);
+            if (!threadRunning) return;
+
+            mainActivity = MainActivity.this;
+            mainActivity.y++;
+        }
+
+        sendVerifCode();
+        if (!threadRunning) return;
+    }
+
+
+
+
+
+
+
+    public void convertImage() {
         new Thread(new Runnable() {
             public void run() {
                 MainActivity mainActivity;
 
-                int cp;
                 MainActivity.this.txtworkh = (TextView) MainActivity.this.findViewById(R.id.txtwork);
                 MainActivity.this.pgb = (ProgressBar) MainActivity.this.findViewById(R.id.pgb1);
                 MainActivity.this.imgbmp = (ImageView) MainActivity.this.findViewById(R.id.imgvbmp);
@@ -500,320 +953,136 @@ public class MainActivity extends Activity {
 
                 int size_raw = w * h;
 
+                if (MainActivity.this.ESLTypeColor) {
+                    size_raw *= 2;
+                }
+
+
                 MainActivity.this.rawbitstream = new byte[size_raw];
 
-                MainActivity.this.scaledimage = Bitmap.createScaledBitmap(MainActivity.this.scaledimage, MainActivity.this.wi, MainActivity.this.hi, true);
-                int idx = 0;
-                MainActivity.this.y = 0;
-                while (MainActivity.this.y < h) {
-                    MainActivity.this.x = 0;
-                    while (MainActivity.this.x < w) {
-                        int pixel = MainActivity.this.scaledimage.getPixel(MainActivity.this.x, MainActivity.this.y);
-                        if (((int) (((0.299d * ((double) Color.red(pixel))) + (0.587d * ((double) Color.green(pixel)))) + (0.114d * ((double) Color.blue(pixel))))) < 128) {
-                            MainActivity.this.rawbitstream[idx] = (byte) 0;
-                        } else {
-                            MainActivity.this.rawbitstream[idx] = (byte) 1;
-                        }
-                        mainActivity = MainActivity.this;
-                        mainActivity.x++;
-                        idx++;
-                    }
-                    MainActivity.this.handler.post(new Runnable() {
-                        public void run() {
-                            MainActivity.this.pgb.setProgress((MainActivity.this.y * 36) / MainActivity.this.wi);
-                        }
-                    });
-                    MainActivity.this.runOnUiThread(new Runnable() {
-                        public void run() {
-                            MainActivity.this.txtworkh.setText("Converting to monochrome: line " + MainActivity.this.y);
-                        }
-                    });
-                    try {
-                        Thread.sleep(5);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    mainActivity = MainActivity.this;
-                    mainActivity.y++;
-                }
-                int j = idx - 1;
-                int cnt = 1;
-                byte p = MainActivity.this.rawbitstream[0];
-                MainActivity.this.y = 0;
-                List<Integer> compressed = new ArrayList<Integer>();
-                MainActivity.this.runOnUiThread(new Runnable() {
-                    public void run() {
-                        MainActivity.this.txtworkh.setText("RLE compress...");
-                    }
-                });
-                int m = 1;
-                while (m <= j) {
-                    byte n = MainActivity.this.rawbitstream[m];
-                    if (n == p) {
-                        cnt++;
-                        if (m == j - 1) {
-                            compressed.add(Integer.valueOf(cnt));
-                        }
-                    } else {
-                        compressed.add(Integer.valueOf(cnt));
-                        cnt = 1;
-                        if (m == j - 1) {
-                            compressed.add(Integer.valueOf(1));
-                        }
-                    }
-                    p = n;
-                    if ((m & 31) == 0) {
-                        MainActivity.this.handler.post(new Runnable() {
-                            public void run() {
-                                MainActivity.this.pgb.setProgress((MainActivity.this.y / 1238) + 36);
-                            }
-                        });
-                        try {
-                            Thread.sleep(1);
-                        } catch (InterruptedException e2) {
-                            e2.printStackTrace();
-                        }
-                    }
-                    m++;
-                    mainActivity = MainActivity.this;
-                    mainActivity.y++;
-                }
-                MainActivity.this.runOnUiThread(new Runnable() {
-                    public void run() {
-                        MainActivity.this.txtworkh.setText("Hexadecimalifying...");
-                    }
-                });
+                MainActivity.this.scaledimage = Bitmap.createScaledBitmap(MainActivity.this.scaledimage, w, h, true);
 
+
+                MainActivity.this.idx = 0;
+                int size_compressed;
+                MainActivity.this.compressed = new ArrayList<Integer>();
+                List<Byte> hexlist;
 
                 StringBuilder bstr_raw = new StringBuilder();
                 StringBuilder bstr_compressed = new StringBuilder();
-                List<Byte> list;
-                List<Byte> hexlist;
-
-                int compression_type = 0;
-                int datalen = 0;
-                int padded_datalen = 0;
 
 
-                // "rawbitstream" to StringBuilder
-                for (int countbit = 0; countbit < MainActivity.this.rawbitstream.length; countbit++) {
-                    Integer intValue = (int) MainActivity.this.rawbitstream[countbit];
-                    String bs = Integer.toBinaryString(intValue.intValue());
-                    bstr_raw.append(bs);
+
+                convertMonochrome(scaledimage, false);
+                if (!threadRunning) return;
+
+                if (MainActivity.this.ESLTypeColor) {
+                    convertMonochrome(scaledimage, true);
+                    if (!threadRunning) return;
                 }
 
 
-                // "compressed" to StringBuilder
-                bstr_compressed.append(MainActivity.this.rawbitstream[0]);
-                for (Integer intValue : compressed) {
-                    int bsc;
-                    String bs = Integer.toBinaryString(intValue.intValue());
-                    StringBuffer stringBuffer = new StringBuffer(bs.length());
-                    for (bsc = 0; bsc < bs.length() - 1; bsc++) {
-                        stringBuffer.append("0");
-                    }
-                    bstr_compressed.append(stringBuffer.toString());
-                    bstr_compressed.append(bs);
-                }
+                RLECompress();
+                if (!threadRunning) return;
 
 
-                int size_compressed = (int) bstr_compressed.toString().length();
-
-                if (size_compressed < size_raw && rawmode == 0) { // Compressed data mode
-                    compression_type = 2;
-
-                    int klp = bstr_compressed.toString().length() % 320;
-                    if (klp > 0) {
-                        klp = 320 - klp;
-                    }
-                    for (int bsc = 0; bsc < klp; bsc++) {
-                        bstr_compressed.append("0");
-                    }
-
-                    String bstr_compressed_string = bstr_compressed.toString();
-                    hexlist = new ArrayList<Byte>();
-                    for (int bsc = 0; bsc < bstr_compressed_string.length(); bsc += 8) {
-                        list = hexlist;
-                        list.add(Byte.valueOf((byte) Integer.parseInt(bstr_compressed_string.substring(bsc, bsc + 8), 2)));
-                    }
-
-                    datalen = hexlist.size();
-                    padded_datalen = hexlist.size();
-
-                } else { // raw data mode
-                    String bstr_raw_string = bstr_raw.toString();
-                    hexlist = new ArrayList<Byte>();
-                    for (int bsc = 0; bsc < bstr_raw_string.length(); bsc += 8) {
-                        list = hexlist;
-                        list.add(Byte.valueOf((byte) Integer.parseInt(bstr_raw_string.substring(bsc, bsc + 8), 2)));
-                    }
-
-                    datalen = hexlist.size();
+                Hexadecimalifying(bstr_raw, bstr_compressed);
 
 
-                    int klp = bstr_raw.toString().length() % 320;
-                    if (klp > 0) {
-                        klp = 320 - klp;
+                size_compressed = bstr_compressed.toString().length();
+                if ((size_compressed/8) <= 65535 && rawmode == 0 || ((size_raw/8) <= 65535 && rawmode == 1)) {
+                    if (size_compressed < size_raw && rawmode == 0) {
+                        hexlist = createCompressedHexList(bstr_compressed);
                     }
-                    for (int bsc = 0; bsc < klp; bsc++) {
-                        bstr_raw.append("0");
-                    }
-
-                    bstr_raw_string = bstr_raw.toString();
-                    hexlist = new ArrayList<Byte>();
-                    for (int bsc = 0; bsc < bstr_raw_string.length(); bsc += 8) {
-                        list = hexlist;
-                        list.add(Byte.valueOf((byte) Integer.parseInt(bstr_raw_string.substring(bsc, bsc + 8), 2)));
+                    else {
+                        hexlist = createRawHexList(bstr_raw);
                     }
 
-                    padded_datalen = hexlist.size();
-                }
 
-
-                try {
-                    Thread.sleep(400);
-                } catch (InterruptedException e22) {
-                    e22.printStackTrace();
-                }
-                MainActivity.this.handler.post(new Runnable() {
-                    public void run() {
-                        MainActivity.this.pgb.setProgress(MainActivity.SELECT_PHOTO);
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e22) {
+                        e22.printStackTrace();
                     }
-                });
-                MainActivity.audioTrack = new AudioTrack(3, 48000, 4, 2, 48000, 1);
-                byte[] pingcode = new byte[]{(byte) -123, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) -105, (byte) 1, (byte) 0, (byte) 0, (byte) 0, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1, (byte) 1};
-                pingcode[1] = (byte) ((int) (MainActivity.this.plID & 255));
-                pingcode[2] = (byte) ((int) (MainActivity.this.plID >> 8));
-                pingcode[3] = (byte) ((int) (MainActivity.this.plID >> 16));
-                pingcode[4] = (byte) ((int) (MainActivity.this.plID >> 24));
-                byte[] FrameCRC = CRCCalc.GetCRC(pingcode, 30);
-                pingcode[30] = FrameCRC[0];
-                pingcode[31] = FrameCRC[1];
-                MainActivity.this.runOnUiThread(new Runnable() {
-                    public void run() {
-                        MainActivity.this.txtworkh.setText("Waking up ESL...");
-                    }
-                });
-                PP4C.sendPP4C(MainActivity.this.at.getApplicationContext(), pingcode, 32, MainActivity.this.donglever, 50, MainActivity.audioTrack, 150);
-                if (MainActivity.this.donglever == 2) {
-                    SystemClock.sleep(2500);
-                } else if (MainActivity.this.donglever == 1) {
-                    SystemClock.sleep(1800);
-                    PP4C.sendPP4C(MainActivity.this.at.getApplicationContext(), pingcode, 32, MainActivity.this.donglever, 35, MainActivity.audioTrack, 0);
-                    SystemClock.sleep(1800);
-                    PP4C.sendPP4C(MainActivity.this.at.getApplicationContext(), pingcode, 32, MainActivity.this.donglever, 35, MainActivity.audioTrack, 0);
-                    SystemClock.sleep(1800);
-                }
-                byte[] startcode = new byte[54];
-                startcode[0] = (byte) -123;
-                startcode[1] = (byte) ((int) (MainActivity.this.plID & 255));
-                startcode[2] = (byte) ((int) (MainActivity.this.plID >> 8));
-                startcode[3] = (byte) ((int) (MainActivity.this.plID >> 16));
-                startcode[4] = (byte) ((int) (MainActivity.this.plID >> 24));
-                startcode[5] = (byte) 52;
-                startcode[6] = (byte) 0;
-                startcode[7] = (byte) 0;
-                startcode[8] = (byte) 0;
-                startcode[9] = (byte) 5;
-                startcode[10] = (byte) (datalen >> 8);
-                startcode[11] = (byte) (datalen & MotionEventCompat.ACTION_MASK);
-                if (MainActivity.this.PLType.intValue() == 1300) {
-                    byte[] bArr = new byte[20];
-                    bArr = new byte[]{(byte) 0, (byte) compression_type, (byte) 4, (byte) 0, (byte) MainActivity.this.wi, (byte) 0, (byte) MainActivity.this.hi, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) -120, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0};
-                    for (cp = 0; cp < 20; cp++) {
-                        startcode[cp + 12] = bArr[cp];
-                    }
-                } else if (MainActivity.this.PLType.intValue() == 1317 || MainActivity.this.PLType.intValue() == 1322 || MainActivity.this.PLType.intValue() == 1339) {
-                    byte[] bArr2 = new byte[20];
-                    bArr2 = new byte[]{(byte) 0, (byte) compression_type, (byte) 2, (byte) 0, (byte) MainActivity.this.wi, (byte) 0, (byte) MainActivity.this.hi, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) -120, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0};
-                    for (cp = 0; cp < 20; cp++) {
-                        startcode[cp + 12] = bArr2[cp];
-                    }
-                } else if (MainActivity.this.PLType.intValue() == 1318 || MainActivity.this.PLType.intValue() == 1327 || MainActivity.this.PLType.intValue() == 1324) {
-                    byte[] bArr2 = new byte[20];
-                    bArr2 = new byte[]{(byte) 0, (byte) compression_type, (byte) 3, (byte) 0, (byte) MainActivity.this.wi, (byte) 0, (byte) MainActivity.this.hi, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) -120, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0};
-                    for (cp = 0; cp < 20; cp++) {
-                        startcode[cp + 12] = bArr2[cp];
-                    }
-                } else {
-                    byte[] bArr2 = new byte[20];
-                    bArr2 = new byte[]{(byte) 0, (byte) compression_type, (byte) 3, (byte) 0, (byte) MainActivity.this.wi, (byte) 0, (byte) MainActivity.this.hi, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) -120, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0};
-                    for (cp = 0; cp < 20; cp++) {
-                        startcode[cp + 12] = bArr2[cp];
-                    }
-                }
-
-                FrameCRC = CRCCalc.GetCRC(startcode, 32);
-                startcode[32] = FrameCRC[0];
-                startcode[33] = FrameCRC[1];
-                MainActivity.this.runOnUiThread(new Runnable() {
-                    public void run() {
-                        MainActivity.this.txtworkh.setText("Start frame...");
-                    }
-                });
-                PP4C.sendPP4C(MainActivity.this.at.getApplicationContext(), startcode, 34, MainActivity.this.donglever, 6, MainActivity.audioTrack, 30);
-                if (MainActivity.this.donglever == 2) {
-                    SystemClock.sleep(1000);
-                }
-                if (MainActivity.this.donglever == 1) {
-                    SystemClock.sleep(1600);
-                }
-                MainActivity.this.ymax = padded_datalen / 40;
-                MainActivity.this.y = 0;
-                while (MainActivity.this.y < padded_datalen / 40) {
-                    startcode[0] = (byte) -123;
-                    startcode[1] = (byte) ((int) (MainActivity.this.plID & 255));
-                    startcode[2] = (byte) ((int) (MainActivity.this.plID >> 8));
-                    startcode[3] = (byte) ((int) (MainActivity.this.plID >> 16));
-                    startcode[4] = (byte) ((int) (MainActivity.this.plID >> 24));
-                    startcode[5] = (byte) 52;
-                    startcode[6] = (byte) 0;
-                    startcode[7] = (byte) 0;
-                    startcode[8] = (byte) 0;
-                    startcode[9] = (byte) 32;
-                    startcode[10] = (byte) (MainActivity.this.y >> 16);
-                    startcode[11] = (byte) (MainActivity.this.y & MotionEventCompat.ACTION_MASK);
-                    for (cp = 0; cp < 40; cp++) {
-                        startcode[cp + 12] = ((Byte) hexlist.get((MainActivity.this.y * 40) + cp)).byteValue();
-                    }
-                    FrameCRC = CRCCalc.GetCRC(startcode, 52);
-                    startcode[52] = FrameCRC[0];
-                    startcode[53] = FrameCRC[1];
-                    MainActivity.this.runOnUiThread(new Runnable() {
+                    MainActivity.this.handler.post(new Runnable() {
                         public void run() {
-                            MainActivity.this.txtworkh.setText("Data frame " + MainActivity.this.y + "/" + MainActivity.this.ymax);
+                            MainActivity.this.pgb.setProgress(MainActivity.SELECT_PHOTO);
                         }
                     });
-                    PP4C.sendPP4C(MainActivity.this.at.getApplicationContext(), startcode, 54, MainActivity.this.donglever, 1, MainActivity.audioTrack, MainActivity.this.nbRepeatFrame);
-                    if (MainActivity.this.donglever == 2) {
-                        SystemClock.sleep(550);
+
+
+
+                    sendPingCode();
+                    if (!threadRunning) return;
+
+                    sendStartCode(0);
+                    if (!threadRunning) return;
+
+                    MainActivity.this.ymax = padded_datalen / 40;
+                    MainActivity.this.y = 0;
+                    while (MainActivity.this.y < MainActivity.this.ymax) {
+                        sendFrame(hexlist, MainActivity.this.y);
+                        if (!threadRunning) return;
+
+                        mainActivity = MainActivity.this;
+                        mainActivity.y++;
                     }
-                    if (MainActivity.this.donglever == 1) {
-                        SystemClock.sleep(1800);
-                    }
-                    mainActivity = MainActivity.this;
-                    mainActivity.y++;
+
+                    sendVerifCode();
+                    if (!threadRunning) return;
                 }
-                byte[] vercode = new byte[]{(byte) -123, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 52, (byte) 0, (byte) 0, (byte) 0, (byte) 1, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0};
-                vercode[1] = (byte) ((int) (MainActivity.this.plID & 255));
-                vercode[2] = (byte) ((int) (MainActivity.this.plID >> 8));
-                vercode[3] = (byte) ((int) (MainActivity.this.plID >> 16));
-                vercode[4] = (byte) ((int) (MainActivity.this.plID >> 24));
-                FrameCRC = CRCCalc.GetCRC(vercode, 28);
-                vercode[28] = FrameCRC[0];
-                vercode[29] = FrameCRC[1];
-                MainActivity.this.runOnUiThread(new Runnable() {
-                    public void run() {
-                        MainActivity.this.txtworkh.setText("Verify frame...");
+                else {
+                    MainActivity.this.handler.post(new Runnable() {
+                        public void run() {
+                            MainActivity.this.pgb.setProgress(0);
+                            MainActivity.this.txtworkh.setText("Split image and transmit part 1/2...");
+                        }
+                    });
+
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e22) {
+                        e22.printStackTrace();
                     }
-                });
-                PP4C.sendPP4C(MainActivity.this.at.getApplicationContext(), vercode, 30, MainActivity.this.donglever, 10, MainActivity.audioTrack, 50);
-                if (MainActivity.this.donglever != 3) {
-                    SystemClock.sleep(2000);
+
+                    MainActivity.this.scaledimagepart1=Bitmap.createBitmap(MainActivity.this.scaledimage, 0,0, w, h/2);
+                    MainActivity.this.scaledimagepart2=Bitmap.createBitmap(MainActivity.this.scaledimage, 0,h/2, w, h/2);
+
+
+                    MainActivity.this.rawbitstream = new byte[size_raw/2];
+                    sendImage(scaledimagepart1, (size_raw/2), 1);
+                    if (!threadRunning) return;
+
+                    for (int i = 45; i > 0; i--) {
+                        final int sec = i;
+                        MainActivity.this.handler.post(new Runnable() {
+                            public void run() {
+                                MainActivity.this.txtworkh.setText("Waiting " + sec + "s before transmitting part 2/2...");
+                            }
+                        });
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    MainActivity.this.rawbitstream = new byte[size_raw/2];
+                    sendImage(scaledimagepart2, size_raw/2, 2);
+                    if (!threadRunning) return;
                 }
-                MainActivity.this.runOnUiThread(new Runnable() {
+
+
+
+                MainActivity.this.handler.post(new Runnable() {
                     public void run() {
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                         MainActivity.this.txtworkh.setText("Done ! ;-)");
+                        MainActivity.this.btnsendimg.setText("Send image");
                     }
                 });
             }
@@ -937,7 +1206,9 @@ public class MainActivity extends Activity {
         }
         transmitVolume = this.settings.getInt("tvolume", 20);
         vControl.setProgress(transmitVolume);
-        nbRepeatFrame = this.settings.getInt("nbrepeat", 5);
+        nbRepeatFrame = this.settings.getInt("nbrepeat", 3);
+        if (nbRepeatFrame > 5)
+            nbRepeatFrame = 5;
         String p = "";
         if (nbRepeatFrame != 1) {
             p = "s";
@@ -963,7 +1234,6 @@ public class MainActivity extends Activity {
         this.tabHost = (TabHost) findViewById(R.id.tabHost);
         this.tabHost.setup();
         View tabIndicator1 = LayoutInflater.from(this).inflate(R.layout.tab_indicator, this.tabHost.getTabWidget(), false);
-        Log.d("TEST", "" + tabIndicator1.findViewById(R.id.title));
         ((TextView) tabIndicator1.findViewById(R.id.title)).setText("CHANGE PAGE");
         TabSpec spec1 = this.tabHost.newTabSpec("Tab 1");
         spec1.setIndicator(tabIndicator1);
@@ -1036,6 +1306,40 @@ public class MainActivity extends Activity {
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+
+
+        this.btnsendimg = (Button) findViewById(R.id.btnsendimg);
+        this.btnsendimg.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                Button btnsend = (Button) v;
+                String buttonText = btnsend.getText().toString();
+                if (buttonText.equals("Send image")) {
+                    if (!isDonglePaired()) {
+                        return;
+                    }
+                    if (MainActivity.this.ESLType != 2) {
+                        if (MainActivity.this.ESLType == 0) {
+                            Toast.makeText(MainActivity.this, "ESL barcode not scanned !", Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            Toast.makeText(MainActivity.this, "Incompatible ESL type !", Toast.LENGTH_LONG).show();
+                        }
+                        return;
+                    }
+
+                    MainActivity.this.threadRunning = true;
+                    btnsend.setText("Stop send");
+                    convertImage();
+                }
+                else if (buttonText.equals("Stop send")) {
+                    MainActivity.this.threadRunning = false;
+                    //SystemClock.sleep(200);
+                    btnsend.setText("Send image");
+                    MainActivity.this.txtworkh.setText("Stopped successfully !");
+                    MainActivity.this.pgb.setProgress(100);
+                }
             }
         });
     }
