@@ -1665,10 +1665,18 @@ public class MainActivity extends Activity {
                     hcode[6] = (byte) 243;
                     dispDMDuration = (dispDMPage[0] & 15);
                 } else if (dispDuration == 10) {
+                    hcode[1] = (byte) ((int) (MainActivity.this.plID & 255));
+                    hcode[2] = (byte) ((int) (MainActivity.this.plID >> 8));
+                    hcode[3] = (byte) ((int) (MainActivity.this.plID >> 16));
+                    hcode[4] = (byte) ((int) (MainActivity.this.plID >> 24));
                     hcode[6] = (byte) 73;
                     dispDMDuration = (dispDMPage[0] & 15);
                     nbrepeat = 150;
                 } else if (dispDuration == 11) {
+                    hcode[1] = (byte) ((int) (MainActivity.this.plID & 255));
+                    hcode[2] = (byte) ((int) (MainActivity.this.plID >> 8));
+                    hcode[3] = (byte) ((int) (MainActivity.this.plID >> 16));
+                    hcode[4] = (byte) ((int) (MainActivity.this.plID >> 24));
                     hcode[6] = (byte) 201;
                     dispDMDuration = (dispDMPage[0] & 15);
                     nbrepeat = 150;
