@@ -95,12 +95,4 @@
             </LinearLayout>
         </FrameLayout>
     </TabHost>
-
-    <ImageView
-        android:id="@id/imgv1"
-        android:layout_width="fill_parent"
-        android:layout_height="28.0dip"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16.0dip"
-        android:src="@drawable/ftk_logo" />
 </RelativeLayout>
