@@ -26,6 +26,7 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.media.TransportMediator;
 import android.support.v4.view.MotionEventCompat;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -108,6 +109,8 @@ public class MainActivity extends Activity {
     List<Integer> compressed;
     Button scanButton;
     Button btnsendimg;
+    Button btnmanualbarcode;
+    Button btnsetbarcode;
     TextView scaneibarcode;
     TextView scaneiserial;
     TextView scaneitype;
@@ -155,223 +158,228 @@ public class MainActivity extends Activity {
                 Iterator it = MainActivity.this.scanner.getResults().iterator();
                 while (it.hasNext()) {
                     String PLBarcode = ((Symbol) it.next()).getData();
-                    MainActivity.this.plID = (long) ((Integer.parseInt(PLBarcode.substring(2, 7)) << 16) + Integer.parseInt(PLBarcode.substring(7, 12)));
-                    String PLSerial = Long.toHexString(MainActivity.this.plID);
-                    MainActivity.this.PLType = Integer.valueOf(Integer.parseInt(PLBarcode.substring(12, 16)));
-                    MainActivity.this.scaneibarcode.setText("Barcode: " + PLBarcode);
-                    MainActivity.this.scaneiserial.setText("ID: " + PLSerial.toUpperCase());
-                    switch (MainActivity.this.PLType.intValue()) {
-                        case 1206:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E2 HCS)");
-                            MainActivity.this.ESLType = 1;
-                            break;
-                        case 1207:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E2 HCN)");
-                            MainActivity.this.plBitDef = 4;
-                            MainActivity.this.ESLType = 1;
-                            break;
-
-
-                        case 1240:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E4 HCS)");
-                            MainActivity.this.plBitDef = 3;
-                            MainActivity.this.ESLType = 1;
-                            break;
-                        case 1241:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E4 HCN)");
-                            MainActivity.this.plBitDef = 0;
-                            MainActivity.this.ESLType = 1;
-                            break;
-                        case 1242:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E4 HCN FZ)");
-                            MainActivity.this.plBitDef = 0;
-                            MainActivity.this.ESLType = 1;
-                            break;
-
-
-                        case 1217:
-                        case 1265:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E5 HCS)");
-                            MainActivity.this.plBitDef = 2;
-                            MainActivity.this.ESLType = 1;
-                            break;
-                        case 1219:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E5 HCN)");
-                            MainActivity.this.plBitDef = 1;
-                            MainActivity.this.ESLType = 1;
-                            break;
-
-
-                        case 1291:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (FVL Promoline 3-16 (18619-00) segments bitmap not done !)");
-                            MainActivity.this.ESLType = 1;
-                            break;
-
-
-                        case 1510:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag E5 M)");
-                            MainActivity.this.plBitDef = 1;
-                            MainActivity.this.ESLType = 1;
-                            break;
-
-
-                        case 1300:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (DotMatrix DM3370 172x72)");
-                            MainActivity.this.wi = 172;
-                            MainActivity.this.hi = 72;
-                            MainActivity.this.ESLType = 2;
-                            break;
-                        case 1276:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (DotMatrix DM90 320x140) EXPERIMENTAL");
-                            MainActivity.this.wi = 320;
-                            MainActivity.this.hi = 140;
-                            MainActivity.this.ESLType = 2;
-                            break;
-                        case 1275:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (DotMatrix DM110 320x192 (13400-00)) EXPERIMENTAL");
-                            MainActivity.this.wi = 320;
-                            MainActivity.this.hi = 192;
-                            MainActivity.this.ESLType = 2;
-                            break;
-
-
-                        case 1317:
-                        case 1322:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD S 152x152)");
-                            MainActivity.this.wi = 152;
-                            MainActivity.this.hi = 152;
-                            MainActivity.this.ESLType = 2;
-                            break;
-                        case 1339:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD S Red 152x152) EXPERIMENTAL");
-                            MainActivity.this.wi = 152;
-                            MainActivity.this.hi = 152;
-                            MainActivity.this.ESLType = 2;
-                            MainActivity.this.ESLTypeColor = true;
-                            break;
-
-
-                        case 1318:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD M 208x112)");
-                            MainActivity.this.wi = 208;
-                            MainActivity.this.hi = 112;
-                            MainActivity.this.ESLType = 2;
-                            break;
-                        case 1327:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD M Red 208x112)");
-                            MainActivity.this.wi = 208;
-                            MainActivity.this.hi = 112;
-                            MainActivity.this.ESLType = 2;
-                            MainActivity.this.ESLTypeColor = true;
-                            break;
-                        case 1324:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD M FZ 208x112) EXPERIMENTAL");
-                            MainActivity.this.wi = 208;
-                            MainActivity.this.hi = 112;
-                            MainActivity.this.ESLType = 2;
-                            break;
-
-
-                        case 1315:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L 296x128) EXPERIMENTAL");
-                            MainActivity.this.wi = 296;
-                            MainActivity.this.hi = 128;
-                            MainActivity.this.ESLType = 2;
-                            break;
-                        case 1328:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L Red 296x128) EXPERIMENTAL");
-                            MainActivity.this.wi = 296;
-                            MainActivity.this.hi = 128;
-                            MainActivity.this.ESLType = 2;
-                            MainActivity.this.ESLTypeColor = true;
-                            break;
-                        case 1344:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L Yellow 296x128) EXPERIMENTAL");
-                            MainActivity.this.wi = 296;
-                            MainActivity.this.hi = 128;
-                            MainActivity.this.ESLType = 2;
-                            MainActivity.this.ESLTypeColor = true;
-                            break;
-
-
-                        case 1348:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD T Red 296x128) EXPERIMENTAL");
-                            MainActivity.this.wi = 264;
-                            MainActivity.this.hi = 176;
-                            MainActivity.this.ESLType = 2;
-                            MainActivity.this.ESLTypeColor = true;
-                            break;
-                        case 1349:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD T Yellow 296x128) EXPERIMENTAL");
-                            MainActivity.this.wi = 264;
-                            MainActivity.this.hi = 176;
-                            MainActivity.this.ESLType = 2;
-                            MainActivity.this.ESLTypeColor = true;
-                            break;
-
-
-                        case 1314:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD110 400x300) EXPERIMENTAL");
-                            MainActivity.this.wi = 400;
-                            MainActivity.this.hi = 300;
-                            MainActivity.this.ESLType = 2;
-                            break;
-                        case 1336:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD110 Red 400x300) EXPERIMENTAL");
-                            MainActivity.this.wi = 400;
-                            MainActivity.this.hi = 300;
-                            MainActivity.this.ESLType = 2;
-                            MainActivity.this.ESLTypeColor = true;
-                            break;
-
-
-                        case 1351:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD150 648x480) EXPERIMENTAL");
-                            MainActivity.this.wi = 648;
-                            MainActivity.this.hi = 480;
-                            MainActivity.this.ESLType = 2;
-                            break;
-                        case 1353:
-                        case 1354:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD150 Red 648x480)");
-                            MainActivity.this.wi = 648;
-                            MainActivity.this.hi = 480;
-                            MainActivity.this.ESLType = 2;
-                            MainActivity.this.ESLTypeColor = true;
-                            break;
-
-
-                        case 1319:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD200 800x480) EXPERIMENTAL");
-                            MainActivity.this.wi = 800;
-                            MainActivity.this.hi = 480;
-                            MainActivity.this.ESLType = 2;
-                            break;
-                        case 1340:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD200 Red 800x480) EXPERIMENTAL");
-                            MainActivity.this.wi = 800;
-                            MainActivity.this.hi = 480;
-                            MainActivity.this.ESLType = 2;
-                            MainActivity.this.ESLTypeColor = true;
-                            break;
-                        case 1346:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD200 Yellow 800x480) EXPERIMENTAL");
-                            MainActivity.this.wi = 800;
-                            MainActivity.this.hi = 480;
-                            MainActivity.this.ESLType = 2;
-                            MainActivity.this.ESLTypeColor = true;
-                            break;
-
-                        default:
-                            MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (incompatible)");
-                            MainActivity.this.ESLType = -1;
-                            break;
-                    }
-                    MainActivity.this.barcodeScanned = true;
+                    setESLBarcode(PLBarcode);
                 }
             }
         }
     };
+
+    private void setESLBarcode(String PLBarcode) {
+        MainActivity.this.plID = (long) ((Integer.parseInt(PLBarcode.substring(2, 7)) << 16) + Integer.parseInt(PLBarcode.substring(7, 12)));
+        String PLSerial = Long.toHexString(MainActivity.this.plID);
+        MainActivity.this.PLType = Integer.valueOf(Integer.parseInt(PLBarcode.substring(12, 16)));
+        MainActivity.this.scaneibarcode.setText("Barcode: " + PLBarcode);
+        MainActivity.this.scaneiserial.setText("ID: " + PLSerial.toUpperCase());
+        switch (MainActivity.this.PLType.intValue()) {
+            case 1206:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E2 HCS)");
+                MainActivity.this.ESLType = 1;
+                break;
+            case 1207:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E2 HCN)");
+                MainActivity.this.plBitDef = 4;
+                MainActivity.this.ESLType = 1;
+                break;
+
+
+            case 1240:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E4 HCS)");
+                MainActivity.this.plBitDef = 3;
+                MainActivity.this.ESLType = 1;
+                break;
+            case 1241:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E4 HCN)");
+                MainActivity.this.plBitDef = 0;
+                MainActivity.this.ESLType = 1;
+                break;
+            case 1242:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E4 HCN FZ)");
+                MainActivity.this.plBitDef = 0;
+                MainActivity.this.ESLType = 1;
+                break;
+
+
+            case 1217:
+            case 1265:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E5 HCS)");
+                MainActivity.this.plBitDef = 2;
+                MainActivity.this.ESLType = 1;
+                break;
+            case 1219:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E5 HCN)");
+                MainActivity.this.plBitDef = 1;
+                MainActivity.this.ESLType = 1;
+                break;
+
+
+            case 1291:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (FVL Promoline 3-16 (18619-00) segments bitmap not done !)");
+                MainActivity.this.ESLType = 1;
+                break;
+
+
+            case 1510:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag E5 M)");
+                MainActivity.this.plBitDef = 1;
+                MainActivity.this.ESLType = 1;
+                break;
+
+
+            case 1300:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (DotMatrix DM3370 172x72)");
+                MainActivity.this.wi = 172;
+                MainActivity.this.hi = 72;
+                MainActivity.this.ESLType = 2;
+                break;
+            case 1276:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (DotMatrix DM90 320x140) EXPERIMENTAL");
+                MainActivity.this.wi = 320;
+                MainActivity.this.hi = 140;
+                MainActivity.this.ESLType = 2;
+                break;
+            case 1275:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (DotMatrix DM110 320x192 (13400-00)) EXPERIMENTAL");
+                MainActivity.this.wi = 320;
+                MainActivity.this.hi = 192;
+                MainActivity.this.ESLType = 2;
+                break;
+
+
+            case 1317:
+            case 1322:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD S 152x152)");
+                MainActivity.this.wi = 152;
+                MainActivity.this.hi = 152;
+                MainActivity.this.ESLType = 2;
+                break;
+            case 1339:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD S Red 152x152) EXPERIMENTAL");
+                MainActivity.this.wi = 152;
+                MainActivity.this.hi = 152;
+                MainActivity.this.ESLType = 2;
+                MainActivity.this.ESLTypeColor = true;
+                break;
+
+
+            case 1318:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD M 208x112)");
+                MainActivity.this.wi = 208;
+                MainActivity.this.hi = 112;
+                MainActivity.this.ESLType = 2;
+                break;
+            case 1327:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD M Red 208x112)");
+                MainActivity.this.wi = 208;
+                MainActivity.this.hi = 112;
+                MainActivity.this.ESLType = 2;
+                MainActivity.this.ESLTypeColor = true;
+                break;
+            case 1324:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD M FZ 208x112) EXPERIMENTAL");
+                MainActivity.this.wi = 208;
+                MainActivity.this.hi = 112;
+                MainActivity.this.ESLType = 2;
+                break;
+
+
+            case 1315:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L 296x128) EXPERIMENTAL");
+                MainActivity.this.wi = 296;
+                MainActivity.this.hi = 128;
+                MainActivity.this.ESLType = 2;
+                break;
+            case 1328:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L Red 296x128) EXPERIMENTAL");
+                MainActivity.this.wi = 296;
+                MainActivity.this.hi = 128;
+                MainActivity.this.ESLType = 2;
+                MainActivity.this.ESLTypeColor = true;
+                break;
+            case 1344:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L Yellow 296x128) EXPERIMENTAL");
+                MainActivity.this.wi = 296;
+                MainActivity.this.hi = 128;
+                MainActivity.this.ESLType = 2;
+                MainActivity.this.ESLTypeColor = true;
+                break;
+
+
+            case 1348:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD T Red 296x128) EXPERIMENTAL");
+                MainActivity.this.wi = 264;
+                MainActivity.this.hi = 176;
+                MainActivity.this.ESLType = 2;
+                MainActivity.this.ESLTypeColor = true;
+                break;
+            case 1349:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD T Yellow 296x128) EXPERIMENTAL");
+                MainActivity.this.wi = 264;
+                MainActivity.this.hi = 176;
+                MainActivity.this.ESLType = 2;
+                MainActivity.this.ESLTypeColor = true;
+                break;
+
+
+            case 1314:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD110 400x300) EXPERIMENTAL");
+                MainActivity.this.wi = 400;
+                MainActivity.this.hi = 300;
+                MainActivity.this.ESLType = 2;
+                break;
+            case 1336:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD110 Red 400x300) EXPERIMENTAL");
+                MainActivity.this.wi = 400;
+                MainActivity.this.hi = 300;
+                MainActivity.this.ESLType = 2;
+                MainActivity.this.ESLTypeColor = true;
+                break;
+
+
+            case 1351:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD150 648x480) EXPERIMENTAL");
+                MainActivity.this.wi = 648;
+                MainActivity.this.hi = 480;
+                MainActivity.this.ESLType = 2;
+                break;
+            case 1353:
+            case 1354:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD150 Red 648x480)");
+                MainActivity.this.wi = 648;
+                MainActivity.this.hi = 480;
+                MainActivity.this.ESLType = 2;
+                MainActivity.this.ESLTypeColor = true;
+                break;
+
+
+            case 1319:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD200 800x480) EXPERIMENTAL");
+                MainActivity.this.wi = 800;
+                MainActivity.this.hi = 480;
+                MainActivity.this.ESLType = 2;
+                break;
+            case 1340:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD200 Red 800x480) EXPERIMENTAL");
+                MainActivity.this.wi = 800;
+                MainActivity.this.hi = 480;
+                MainActivity.this.ESLType = 2;
+                MainActivity.this.ESLTypeColor = true;
+                break;
+            case 1346:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD200 Yellow 800x480) EXPERIMENTAL");
+                MainActivity.this.wi = 800;
+                MainActivity.this.hi = 480;
+                MainActivity.this.ESLType = 2;
+                MainActivity.this.ESLTypeColor = true;
+                break;
+
+            default:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (incompatible)");
+                MainActivity.this.ESLType = -1;
+                break;
+        }
+        MainActivity.this.barcodeScanned = true;
+    }
+
     private boolean repeatMode = false;
     private boolean repeatModeDM = false;
 
@@ -1339,6 +1347,65 @@ public class MainActivity extends Activity {
                     btnsend.setText("Send image");
                     MainActivity.this.txtworkh.setText("Stopped successfully !");
                     MainActivity.this.pgb.setProgress(100);
+                }
+            }
+        });
+
+        this.btnmanualbarcode = (Button) findViewById(R.id.manual_scan_button);
+        this.btnmanualbarcode.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                Button btn = (Button) v;
+
+                FrameLayout camerapreview = (FrameLayout) findViewById(R.id.cameraPreview);
+                Button scanbutton = (Button) findViewById(R.id.scan_button);
+
+                TextView manualbarcodetitle = (TextView) findViewById(R.id.manual_barcode_title);
+                EditText barcodeedittext = (EditText) findViewById(R.id.barcode_edittext);
+                Button setbarcodebutton = (Button) findViewById(R.id.set_barcode_button);
+
+                if (btn.getText().toString().equals("Enter barcode manually")) {
+                    btn.setText("Scan barcode using camera");
+
+                    camerapreview.setVisibility(View.GONE);
+                    scanbutton.setVisibility(View.GONE);
+
+                    manualbarcodetitle.setVisibility(View.VISIBLE);
+                    barcodeedittext.setVisibility(View.VISIBLE);
+                    setbarcodebutton.setVisibility(View.VISIBLE);
+
+                    barcodeedittext.requestFocus();
+                }
+                else {
+                    btn.setText("Enter barcode manually");
+
+                    camerapreview.setVisibility(View.VISIBLE);
+                    scanbutton.setVisibility(View.VISIBLE);
+
+                    manualbarcodetitle.setVisibility(View.GONE);
+                    barcodeedittext.setVisibility(View.GONE);
+                    setbarcodebutton.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        this.btnsetbarcode = (Button) findViewById(R.id.set_barcode_button);
+        this.btnsetbarcode.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                EditText barcodeedittext = (EditText) findViewById(R.id.barcode_edittext);
+
+                String barcode = barcodeedittext.getText().toString().toUpperCase();
+
+                if (barcode.length() == 17) {
+                    if (Character.isLetter(barcode.charAt(0)) && TextUtils.isDigitsOnly(barcode.substring(1, 17))) {
+                        setESLBarcode(barcode);
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this, "The barcode entered is invalid!", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "The barcode entered is not the right length!", Toast.LENGTH_SHORT).show();
                 }
             }
         });

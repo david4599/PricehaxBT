@@ -82,7 +82,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="48.0dip"
             android:gravity="center_horizontal"
-            android:text="Version 1.1 BT (18.0)"
+            android:text="Version 1.2 BT (19)"
             android:textColor="@color/textcolor"
             android:textSize="15.0sp" />
 
