@@ -288,6 +288,8 @@ public class MainActivity extends Activity {
                 MainActivity.this.hi = 128;
                 MainActivity.this.ESLType = 2;
                 break;
+            // 2021 revision of the SmartTag HD L Red 296x128 - black housing
+            case 1370:
             case 1328:
                 MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L Red 296x128) EXPERIMENTAL");
                 MainActivity.this.wi = 296;
