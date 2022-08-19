@@ -288,10 +288,10 @@ public class MainActivity extends Activity {
                 MainActivity.this.hi = 128;
                 MainActivity.this.ESLType = 2;
                 break;
-            // 2021 revision of the SmartTag HD L Red 296x128 - black housing
-            case 1370:
+
+            case 1370: // 2021 revision of the SmartTag HD L Red 296x128 - black housing
             case 1328:
-                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L Red 296x128) EXPERIMENTAL");
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L Red 296x128)");
                 MainActivity.this.wi = 296;
                 MainActivity.this.hi = 128;
                 MainActivity.this.ESLType = 2;
@@ -343,6 +343,7 @@ public class MainActivity extends Activity {
                 MainActivity.this.hi = 480;
                 MainActivity.this.ESLType = 2;
                 break;
+            case 1371: // 2021 revision of the SmartTag HD150 Red 648x480 - black housing
             case 1353:
             case 1354:
                 MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD150 Red 648x480)");
