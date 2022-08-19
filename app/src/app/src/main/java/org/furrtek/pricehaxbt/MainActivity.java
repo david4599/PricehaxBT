@@ -54,6 +54,7 @@ import android.widget.ToggleButton;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -152,19 +153,40 @@ public class MainActivity extends Activity {
             Image barcode = new Image(size.width, size.height, "Y800");
             barcode.setData(data);
             if (MainActivity.this.scanner.scanImage(barcode) != 0) {
-                MainActivity.this.previewing = false;
-                MainActivity.this.mCamera.setPreviewCallback(null);
-                MainActivity.this.mCamera.stopPreview();
+
                 Iterator it = MainActivity.this.scanner.getResults().iterator();
                 while (it.hasNext()) {
                     String PLBarcode = ((Symbol) it.next()).getData();
-                    setESLBarcode(PLBarcode);
+                    if (setESLBarcode(PLBarcode)) {
+                        MainActivity.this.previewing = false;
+                        MainActivity.this.mCamera.setPreviewCallback(null);
+                        MainActivity.this.mCamera.stopPreview();
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this, "The scanned barcode is invalid!", Toast.LENGTH_SHORT).show();+
+                    }
+
                 }
             }
         }
     };
 
-    private void setESLBarcode(String PLBarcode) {
+    private boolean isBarcodeChecksumValid(String barcode) {
+        byte[] barcodeBytes = barcode.getBytes(Charset.forName("UTF-8"));
+
+        int checksum = 0;
+        for (int i = 0; i < barcodeBytes.length - 1; i++) {
+            checksum += (int) barcodeBytes[i];
+        }
+
+        checksum %= 10;
+
+        return checksum == barcodeBytes[barcodeBytes.length - 1] - '0';
+    }
+
+    private boolean setESLBarcode(String PLBarcode) {
+        if (!isBarcodeChecksumValid(PLBarcode)) return false;
+
         MainActivity.this.plID = (long) ((Integer.parseInt(PLBarcode.substring(2, 7)) << 16) + Integer.parseInt(PLBarcode.substring(7, 12)));
         String PLSerial = Long.toHexString(MainActivity.this.plID);
         MainActivity.this.PLType = Integer.valueOf(Integer.parseInt(PLBarcode.substring(12, 16)));
@@ -381,6 +403,7 @@ public class MainActivity extends Activity {
                 break;
         }
         MainActivity.this.barcodeScanned = true;
+        return true;
     }
 
     private boolean repeatMode = false;
@@ -1399,16 +1422,12 @@ public class MainActivity extends Activity {
                 String barcode = barcodeedittext.getText().toString().toUpperCase();
 
                 if (barcode.length() == 17) {
-                    if (Character.isLetter(barcode.charAt(0)) && TextUtils.isDigitsOnly(barcode.substring(1, 17))) {
-                        setESLBarcode(barcode);
+                    if (!setESLBarcode(barcode)) {
+                        Toast.makeText(MainActivity.this, "The barcode is invalid!", Toast.LENGTH_SHORT).show();
                     }
-                    else {
-                        Toast.makeText(MainActivity.this, "The barcode entered is invalid!", Toast.LENGTH_SHORT).show();
-                    }
-
                 }
                 else {
-                    Toast.makeText(MainActivity.this, "The barcode entered is not the right length!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "The barcode is not 17 characters long!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
