@@ -163,9 +163,8 @@ public class MainActivity extends Activity {
                         MainActivity.this.mCamera.stopPreview();
                     }
                     else {
-                        Toast.makeText(MainActivity.this, "The scanned barcode is invalid!", Toast.LENGTH_SHORT).show();+
+                        Toast.makeText(MainActivity.this, "The scanned barcode is invalid!", Toast.LENGTH_SHORT).show();
                     }
-
                 }
             }
         }
