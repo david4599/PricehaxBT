@@ -307,14 +307,14 @@ public class MainActivity extends Activity {
 
 
             case 1348:
-                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD T Red 296x128) EXPERIMENTAL");
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD T Red 264x176) EXPERIMENTAL");
                 MainActivity.this.wi = 264;
                 MainActivity.this.hi = 176;
                 MainActivity.this.ESLType = 2;
                 MainActivity.this.ESLTypeColor = true;
                 break;
             case 1349:
-                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD T Yellow 296x128) EXPERIMENTAL");
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD T Yellow 264x176) EXPERIMENTAL");
                 MainActivity.this.wi = 264;
                 MainActivity.this.hi = 176;
                 MainActivity.this.ESLType = 2;
