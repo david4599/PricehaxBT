@@ -1,7 +1,7 @@
 /* 
- *  Pricehax BT IR dongle (for Pricehax Version 1.1 BT (18.0))
+ *  Pricehax BT IR dongle (for Pricehax Version 1.2 BT (19))
  *  furrtek 2014
- *  david4599 2019
+ *  david4599 2019 - 2022
  */
 
 #define F_CPU 16000000L
