@@ -14,6 +14,16 @@ Videos about this project are archived in this [playlist](https://www.youtube.co
 - Download and install the [Android app](https://github.com/david4599/PricehaxBT/releases/latest), pair the dongle and enjoy ;-)
 
 ## Android app changelog
+
+### Version 1.2 (20)
+
+**Features**
+- Added 1370 and 1371 ESL types (ST HD L Red and ST HD150 Red black housing versions)
+- Added checksum verification of the ESL barcode
+
+**Fixes**
+- Fixed SmartTag HD T definition in information label
+
 ### Version 1.2 (19)
 
 **Features**
@@ -27,7 +37,7 @@ Videos about this project are archived in this [playlist](https://www.youtube.co
 - Added the possibility to stop sending the current image
 
 **Fixes**
-- Fixed ST HD150 and ST HD200 definition
+- Fixed ST HD150 and ST HD200 definitions
 
 ### Version 1.1 (17)
 
