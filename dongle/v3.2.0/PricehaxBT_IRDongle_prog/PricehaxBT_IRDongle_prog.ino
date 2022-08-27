@@ -1,5 +1,5 @@
 /* 
- *  Pricehax BT IR dongle (for Pricehax Version 1.2 BT (19))
+ *  Pricehax BT IR dongle (for Pricehax Version 1.2 BT (20))
  *  furrtek 2014
  *  david4599 2019 - 2022
  */
