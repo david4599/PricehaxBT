@@ -1,31 +1,44 @@
 package org.furrtek.pricehaxbt;
 
-import android.content.Context;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.media.AudioTrack.OnPlaybackPositionUpdateListener;
 import android.support.v4.view.MotionEventCompat;
-import android.util.Log;
 
 import java.io.IOException;
 
-public class PP4C {
+public class PPM {
     static AudioManager mAudioManager;
     static int origVolume;
     static double[] sample = new double[48000];
 
-    private static void sendData(byte[] tmp) {
-        Log.d("BT SEND", "SENDING DATA...");
+    private static void sendData(MainActivity mainActivity, byte[] tmp) {
+        //Log.d("BT SEND", "SENDING DATA...");
         try {
             byte[] buffer = new byte[128];
             int timeout = 20;
+            int timeoutRead = 2000;
 
             do {
                 MainActivity.outStream.write(tmp);
-                do {
-                } while (MainActivity.inStream.available() <= 0);
 
-                int res = MainActivity.inStream.read(buffer);
+                for (int i = timeoutRead; i > 0; i--) {
+                    if (MainActivity.inStream.available() > 0) {
+                        break;
+                    }
+
+                    if (!mainActivity.isSendImageThreadRunning()) {
+                        return;
+                    }
+
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e22) {
+                        e22.printStackTrace();
+                    }
+                }
+
+                MainActivity.inStream.read(buffer);
                 timeout--;
             } while (buffer[0] == (byte) 49 && timeout >= 0);
 
@@ -36,25 +49,40 @@ public class PP4C {
         }
     }
 
-    static void sendPP4C(Context context, byte[] hcode, int length, int donglever, int rpt, AudioTrack audioTrack, int nbRepeatFrame) {
+    static void sendPPM(MainActivity mainActivity, byte[] hcode, boolean pp16Mode, int length, int donglever, int rpt, AudioTrack audioTrack, int nbRepeatFrame) {
         double[] pcode = new double[256];
         byte[] generatedSnd = new byte[96000];
         if (donglever == 3) {
             int cp;
-            byte[] btdata = new byte[58];
-            btdata[0] = (byte) -86;
+            byte[] btdata = new byte[60];
+            btdata[0] = (byte) 170; // The first 4 bytes are only used by the dongle, they are not part of the PPM protocol
+
+            if (pp16Mode) {
+                btdata[0] = (byte) 171;
+            }
+
             btdata[1] = (byte) (nbRepeatFrame >> 8);
-            btdata[2] = (byte) (nbRepeatFrame & MotionEventCompat.ACTION_MASK);
+            btdata[2] = (byte) (nbRepeatFrame & 0xFF);
             btdata[3] = (byte) length;
             for (cp = 0; cp < length; cp++) {
                 btdata[cp + 4] = hcode[cp];
             }
-            String plHexString = "";
-            for (cp = 0; cp < btdata.length; cp++) {
-                plHexString = plHexString + String.format("%02X", new Object[]{Byte.valueOf(btdata[cp])});
+
+            int basicChecksum = 0;
+            for(byte i = 0; i < 4 + length; i++){
+                basicChecksum += (btdata[i] & 0xFF); // " & 0xFF" is here to convert to unsigned byte because btdata[i] is a signed byte
             }
-            sendData(btdata);
-            Log.d("DATA", "SENT " + plHexString);
+
+            // Should not overflow since the max possible checksum should be less than 16384 (if all bytes are 255, 255 * 64 = 16320)
+            btdata[4 + length] = (byte) (basicChecksum >> 8);
+            btdata[4 + length + 1] = (byte) (basicChecksum & 0xFF);
+
+            //String plHexString = "";
+            //for (cp = 0; cp < btdata.length; cp++) {
+            //    plHexString = plHexString + String.format("%02X", new Object[]{Byte.valueOf(btdata[cp])});
+            //}
+            sendData(mainActivity, btdata);
+            //Log.d("DATA", "SENT " + plHexString);
         }
         if (donglever < 3) {
             int i;
@@ -78,7 +106,7 @@ public class PP4C {
                     pcode[(i * 4) + 3] = (double) ((hcode[i] >> 6) & 3);
                 }
             }
-            mAudioManager = (AudioManager) context.getSystemService("audio");
+            mAudioManager = (AudioManager) mainActivity.at.getApplicationContext().getSystemService("audio");
             origVolume = mAudioManager.getStreamVolume(3);
             mAudioManager.setStreamVolume(3, (int) (((double) mAudioManager.getStreamMaxVolume(3)) * (((double) (((float) MainActivity.transmitVolume) / 100.0f)) + 0.6d)), 0);
             for (int r = 0; r < 48000; r++) {
@@ -165,7 +193,7 @@ public class PP4C {
                     } catch (IllegalStateException e) {
                         e.printStackTrace();
                     }
-                    PP4C.mAudioManager.setStreamVolume(3, PP4C.origVolume, 0);
+                    PPM.mAudioManager.setStreamVolume(3, PPM.origVolume, 0);
                 }
 
                 public void onPeriodicNotification(AudioTrack track) {

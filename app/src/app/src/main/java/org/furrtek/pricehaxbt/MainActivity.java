@@ -26,7 +26,6 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v4.media.TransportMediator;
 import android.support.v4.view.MotionEventCompat;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +41,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
@@ -87,7 +87,8 @@ public class MainActivity extends Activity {
     Integer PLType;
     Activity at = this;
     int donglever;
-    int rawmode;
+    boolean rawmode_forced;
+    boolean rawmode_enabled;
     Handler handler = new Handler();
     int hi;
     InputStream imageStream = null;
@@ -135,6 +136,9 @@ public class MainActivity extends Activity {
     private Camera mCamera;
     private CameraPreview mPreview;
     private boolean previewing = true;
+    private boolean pp16Mode = true;
+    private boolean oldAutoFocusMode = false;
+
     private Runnable doAutoFocus = new Runnable() {
         public void run() {
             if (MainActivity.this.previewing && MainActivity.this.tabHost.getCurrentTab() == 1 && MainActivity.this.mCamera != null) {
@@ -144,6 +148,8 @@ public class MainActivity extends Activity {
     };
     AutoFocusCallback autoFocusCB = new AutoFocusCallback() {
         public void onAutoFocus(boolean success, Camera camera) {
+            // postDelayed() will call doAutoFocus() and onAutoFocus() will be called again from mCamera.autoFocus().
+            // This will create a timer that will readjust the focus every second.
             MainActivity.this.autoFocusHandler.postDelayed(MainActivity.this.doAutoFocus, 1000);
         }
     };
@@ -161,6 +167,7 @@ public class MainActivity extends Activity {
                         MainActivity.this.previewing = false;
                         MainActivity.this.mCamera.setPreviewCallback(null);
                         MainActivity.this.mCamera.stopPreview();
+                        MainActivity.this.scanButton.setText("Scan another ESL barcode?");
                     }
                     else {
                         Toast.makeText(MainActivity.this, "The scanned barcode is invalid!", Toast.LENGTH_SHORT).show();
@@ -763,21 +770,28 @@ public class MainActivity extends Activity {
                 MainActivity.this.txtworkh.setText("Waking up ESL...");
             }
         });
-        PP4C.sendPP4C(MainActivity.this.at.getApplicationContext(), pingcode, 32, MainActivity.this.donglever, 50, MainActivity.audioTrack, 250);
+
+        int wakeupRepeat = 250;
+        if (MainActivity.this.pp16Mode) wakeupRepeat *= 2;
+
+        PPM.sendPPM(this, pingcode, MainActivity.this.pp16Mode, 32, MainActivity.this.donglever, 50, MainActivity.audioTrack, wakeupRepeat);
         if (MainActivity.this.donglever == 2) {
             SystemClock.sleep(2500);
         } else if (MainActivity.this.donglever == 1) {
             SystemClock.sleep(1800);
-            PP4C.sendPP4C(MainActivity.this.at.getApplicationContext(), pingcode, 32, MainActivity.this.donglever, 35, MainActivity.audioTrack, 0);
+            PPM.sendPPM(this, pingcode, MainActivity.this.pp16Mode, 32, MainActivity.this.donglever, 35, MainActivity.audioTrack, 0);
             SystemClock.sleep(1800);
-            PP4C.sendPP4C(MainActivity.this.at.getApplicationContext(), pingcode, 32, MainActivity.this.donglever, 35, MainActivity.audioTrack, 0);
+            PPM.sendPPM(this, pingcode, MainActivity.this.pp16Mode, 32, MainActivity.this.donglever, 35, MainActivity.audioTrack, 0);
             SystemClock.sleep(1800);
         }
     }
 
 
 
-
+    // Part:
+    // 0 = entire image
+    // 1 = 1st half of the image (top)
+    // 2 = 2nd half of the image (bottom)
     private void sendStartCode(int part) {
         byte[] startcode = new byte[54];
         startcode[0] = (byte) -123;
@@ -791,7 +805,7 @@ public class MainActivity extends Activity {
         startcode[8] = (byte) 0;
         startcode[9] = (byte) 5;
         startcode[10] = (byte) (datalen >> 8);
-        startcode[11] = (byte) (datalen & MotionEventCompat.ACTION_MASK);
+        startcode[11] = (byte) (datalen & 0xFF);
         byte[] bArr = new byte[20];
         if (part == 0) {
             bArr = new byte[]{(byte) 0, (byte) compression_type, (byte) 2, (byte) (MainActivity.this.wi >> 8), (byte) (MainActivity.this.wi & 255), (byte) (MainActivity.this.hi >> 8), (byte) (MainActivity.this.hi & 255), (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) -120, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0};
@@ -817,7 +831,7 @@ public class MainActivity extends Activity {
                 MainActivity.this.txtworkh.setText("Start frame...");
             }
         });
-        PP4C.sendPP4C(MainActivity.this.at.getApplicationContext(), startcode, 34, MainActivity.this.donglever, 6, MainActivity.audioTrack, 10);
+        PPM.sendPPM(this, startcode, MainActivity.this.pp16Mode, 34, MainActivity.this.donglever, 6, MainActivity.audioTrack, 10);
         if (MainActivity.this.donglever == 2) {
             SystemClock.sleep(1000);
         }
@@ -831,25 +845,25 @@ public class MainActivity extends Activity {
 
 
     private void sendFrame(List<Byte> hexlist, int numframe) {
-        byte[] startcode = new byte[54];
-        startcode[0] = (byte) -123;
-        startcode[1] = (byte) ((int) (MainActivity.this.plID & 255));
-        startcode[2] = (byte) ((int) (MainActivity.this.plID >> 8));
-        startcode[3] = (byte) ((int) (MainActivity.this.plID >> 16));
-        startcode[4] = (byte) ((int) (MainActivity.this.plID >> 24));
-        startcode[5] = (byte) 52;
-        startcode[6] = (byte) 0;
-        startcode[7] = (byte) 0;
-        startcode[8] = (byte) 0;
-        startcode[9] = (byte) 32;
-        startcode[10] = (byte) (numframe >> 8);
-        startcode[11] = (byte) (numframe & MotionEventCompat.ACTION_MASK);
+        byte[] framecode = new byte[54];
+        framecode[0] = (byte) -123;
+        framecode[1] = (byte) ((int) (MainActivity.this.plID & 255));
+        framecode[2] = (byte) ((int) (MainActivity.this.plID >> 8));
+        framecode[3] = (byte) ((int) (MainActivity.this.plID >> 16));
+        framecode[4] = (byte) ((int) (MainActivity.this.plID >> 24));
+        framecode[5] = (byte) 52;
+        framecode[6] = (byte) 0;
+        framecode[7] = (byte) 0;
+        framecode[8] = (byte) 0;
+        framecode[9] = (byte) 32;
+        framecode[10] = (byte) (numframe >> 8);
+        framecode[11] = (byte) (numframe & 0xFF);
         for (int cp = 0; cp < 40; cp++) {
-            startcode[cp + 12] = ((Byte) hexlist.get((numframe * 40) + cp)).byteValue();
+            framecode[cp + 12] = ((Byte) hexlist.get((numframe * 40) + cp)).byteValue();
         }
-        byte[] FrameCRC = CRCCalc.GetCRC(startcode, 52);
-        startcode[52] = FrameCRC[0];
-        startcode[53] = FrameCRC[1];
+        byte[] FrameCRC = CRCCalc.GetCRC(framecode, 52);
+        framecode[52] = FrameCRC[0];
+        framecode[53] = FrameCRC[1];
 
         if (!threadRunning) return;
         MainActivity.this.runOnUiThread(new Runnable() {
@@ -857,7 +871,7 @@ public class MainActivity extends Activity {
                 MainActivity.this.txtworkh.setText("Data frame " + MainActivity.this.y + "/" + MainActivity.this.ymax);
             }
         });
-        PP4C.sendPP4C(MainActivity.this.at.getApplicationContext(), startcode, 54, MainActivity.this.donglever, 1, MainActivity.audioTrack, MainActivity.this.nbRepeatFrame);
+        PPM.sendPPM(this, framecode, MainActivity.this.pp16Mode, 54, MainActivity.this.donglever, 1, MainActivity.audioTrack, MainActivity.this.nbRepeatFrame);
         if (MainActivity.this.donglever == 2) {
             SystemClock.sleep(550);
         }
@@ -887,7 +901,7 @@ public class MainActivity extends Activity {
                 MainActivity.this.txtworkh.setText("Verify frame...");
             }
         });
-        PP4C.sendPP4C(MainActivity.this.at.getApplicationContext(), vercode, 30, MainActivity.this.donglever, 10, MainActivity.audioTrack, 50);
+        PPM.sendPPM(this, vercode, MainActivity.this.pp16Mode, 30, MainActivity.this.donglever, 10, MainActivity.audioTrack, 50);
         if (MainActivity.this.donglever != 3) {
             SystemClock.sleep(2000);
         }
@@ -896,10 +910,11 @@ public class MainActivity extends Activity {
 
 
 
-    private void sendImage(Bitmap image, int size_raw, int imagePart) {
-        MainActivity mainActivity;
+    private List<Byte> convertImage(Bitmap image, int size_raw) {
         int size_compressed;
         List<Byte> hexlist;
+
+        MainActivity.this.rawbitstream = new byte[size_raw];
 
         MainActivity.this.idx = 0;
         MainActivity.this.compressed = new ArrayList<Integer>();
@@ -908,27 +923,31 @@ public class MainActivity extends Activity {
         StringBuilder bstr_compressed = new StringBuilder();
 
 
+        // Add black/white colors first
         convertMonochrome(image, false);
-        if (!threadRunning) return;
+        if (!threadRunning) return null;
 
+        // Then add red color if compatible ESL
         if (MainActivity.this.ESLTypeColor) {
             convertMonochrome(image, true);
-            if (!threadRunning) return;
+            if (!threadRunning) return null;
         }
 
 
         RLECompress();
-        if (!threadRunning) return;
+        if (!threadRunning) return null;
 
 
         Hexadecimalifying(bstr_raw, bstr_compressed);
 
         size_compressed = bstr_compressed.toString().length();
-        if (size_compressed < size_raw && rawmode == 0) { // Compressed data mode
+        if (size_compressed < size_raw && !rawmode_forced) { // Compressed data mode
             hexlist = createCompressedHexList(bstr_compressed);
+            rawmode_enabled = false;
         }
         else { // raw data mode
             hexlist = createRawHexList(bstr_raw);
+            rawmode_enabled = true;
         }
 
 
@@ -943,7 +962,13 @@ public class MainActivity extends Activity {
             }
         });
 
+        return hexlist;
+    }
 
+
+
+    private void sendImage(List<Byte> hexlist, int imagePart) {
+        MainActivity mainActivity;
 
         sendPingCode();
         if (!threadRunning) return;
@@ -962,20 +987,13 @@ public class MainActivity extends Activity {
         }
 
         sendVerifCode();
-        if (!threadRunning) return;
     }
 
 
 
-
-
-
-
-    public void convertImage() {
+    public void convertAndSendImage() {
         new Thread(new Runnable() {
             public void run() {
-                MainActivity mainActivity;
-
                 MainActivity.this.txtworkh = (TextView) MainActivity.this.findViewById(R.id.txtwork);
                 MainActivity.this.pgb = (ProgressBar) MainActivity.this.findViewById(R.id.pgb1);
                 MainActivity.this.imgbmp = (ImageView) MainActivity.this.findViewById(R.id.imgvbmp);
@@ -1005,10 +1023,11 @@ public class MainActivity extends Activity {
                 StringBuilder bstr_compressed = new StringBuilder();
 
 
-
+                // Add black/white colors first
                 convertMonochrome(scaledimage, false);
                 if (!threadRunning) return;
 
+                // Then add red color if compatible ESL
                 if (MainActivity.this.ESLTypeColor) {
                     convertMonochrome(scaledimage, true);
                     if (!threadRunning) return;
@@ -1023,8 +1042,14 @@ public class MainActivity extends Activity {
 
 
                 size_compressed = bstr_compressed.toString().length();
-                if ((size_compressed/8) <= 65535 && rawmode == 0 || ((size_raw/8) <= 65535 && rawmode == 1)) {
-                    if (size_compressed < size_raw && rawmode == 0) {
+
+                // It seems an image cannot be sent if its length (compressed or not) is greater than 64kB.
+                // This is because the "datalen" field (bytes 10 and 11) of the start code is only 2 bytes (unless we can have more?)
+                // A workaround is to split the image e.g. in half and send the parts separately.
+                // So the image has to be converted and compressed a first time to know if we need to split it.
+                // If so, we split it, convert and compress the parts again and send them.
+                if ((size_compressed/8) <= 65535 && !rawmode_forced || ((size_raw/8) <= 65535 && rawmode_forced)) {
+                    if (size_compressed < size_raw && !rawmode_forced) {
                         hexlist = createCompressedHexList(bstr_compressed);
                     }
                     else {
@@ -1043,26 +1068,7 @@ public class MainActivity extends Activity {
                         }
                     });
 
-
-
-                    sendPingCode();
-                    if (!threadRunning) return;
-
-                    sendStartCode(0);
-                    if (!threadRunning) return;
-
-                    MainActivity.this.ymax = padded_datalen / 40;
-                    MainActivity.this.y = 0;
-                    while (MainActivity.this.y < MainActivity.this.ymax) {
-                        sendFrame(hexlist, MainActivity.this.y);
-                        if (!threadRunning) return;
-
-                        mainActivity = MainActivity.this;
-                        mainActivity.y++;
-                    }
-
-                    sendVerifCode();
-                    if (!threadRunning) return;
+                    sendImage(hexlist, 0);
                 }
                 else {
                     MainActivity.this.handler.post(new Runnable() {
@@ -1078,15 +1084,23 @@ public class MainActivity extends Activity {
                         e22.printStackTrace();
                     }
 
-                    MainActivity.this.scaledimagepart1=Bitmap.createBitmap(MainActivity.this.scaledimage, 0,0, w, h/2);
-                    MainActivity.this.scaledimagepart2=Bitmap.createBitmap(MainActivity.this.scaledimage, 0,h/2, w, h/2);
+                    MainActivity.this.scaledimagepart1 = Bitmap.createBitmap(MainActivity.this.scaledimage, 0,0, w, h / 2);
+                    MainActivity.this.scaledimagepart2 = Bitmap.createBitmap(MainActivity.this.scaledimage, 0,h / 2, w, h / 2);
 
 
-                    MainActivity.this.rawbitstream = new byte[size_raw/2];
-                    sendImage(scaledimagepart1, (size_raw/2), 1);
+                    MainActivity.this.rawbitstream = new byte[size_raw / 2];
+                    hexlist = convertImage(scaledimagepart1, (size_raw / 2));
+                    sendImage(hexlist, 1);
                     if (!threadRunning) return;
 
-                    for (int i = 45; i > 0; i--) {
+
+                    // We need to wait because the second part cannot be sent while the ESL is refreshing the first part
+                    int timer = 35;
+
+                    // If the first part was sent compressed, we have to wait even more since decompression takes a lot of time
+                    if (!rawmode_enabled) timer = 50;
+
+                    for (int i = timer; i > 0; i--) {
                         final int sec = i;
                         MainActivity.this.handler.post(new Runnable() {
                             public void run() {
@@ -1100,11 +1114,12 @@ public class MainActivity extends Activity {
                         }
                     }
 
-                    MainActivity.this.rawbitstream = new byte[size_raw/2];
-                    sendImage(scaledimagepart2, size_raw/2, 2);
-                    if (!threadRunning) return;
-                }
 
+                    MainActivity.this.rawbitstream = new byte[size_raw / 2];
+                    hexlist = convertImage(scaledimagepart2, size_raw / 2);
+                    sendImage(hexlist, 2);
+                }
+                if (!threadRunning) return;
 
 
                 MainActivity.this.handler.post(new Runnable() {
@@ -1122,13 +1137,15 @@ public class MainActivity extends Activity {
         }).start();
     }
 
+    public boolean isSendImageThreadRunning() {
+        return threadRunning;
+    }
+
     public void setScanPreview() {
         this.autoFocusHandler = new Handler();
         this.mCamera = getCameraInstance();
-        Parameters params = this.mCamera.getParameters();
-        params.setPreviewSize(640, 480);
-        this.mCamera.setParameters(params);
         this.mPreview = new CameraPreview(this, this.mCamera, this.previewCb, this.autoFocusCB);
+        this.oldAutoFocusMode = this.mPreview.isOldAutoFocusMode();
         this.preview = (FrameLayout) findViewById(R.id.cameraPreview);
         this.preview.addView(this.mPreview);
         this.scanner = new ImageScanner();
@@ -1142,24 +1159,30 @@ public class MainActivity extends Activity {
         this.scanButton = (Button) findViewById(R.id.scan_button);
         this.scanButton.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
+                String scanBarcodeString = "Scan ESL barcode";
+
                 if (MainActivity.this.mCamera == null) {
                     MainActivity.this.previewing = false;
 
                     MainActivity.this.mCamera = MainActivity.getCameraInstance();
-                    MainActivity.this.mCamera.setPreviewCallback(MainActivity.this.previewCb);
-                    MainActivity.this.mCamera.startPreview();
-                    MainActivity.this.previewing = true;
-                    MainActivity.this.mCamera.autoFocus(MainActivity.this.autoFocusCB);
+
                     ((FrameLayout) MainActivity.this.findViewById(R.id.cameraPreview)).addView(MainActivity.this.mPreview);
                 }
                 if (MainActivity.this.barcodeScanned) {
                     MainActivity.this.barcodeScanned = false;
-                    MainActivity.this.scaneibarcode.setText("Scan ESL barcode");
-                    MainActivity.this.mCamera.setPreviewCallback(MainActivity.this.previewCb);
-                    MainActivity.this.mCamera.startPreview();
-                    MainActivity.this.previewing = true;
-                    MainActivity.this.mCamera.autoFocus(MainActivity.this.autoFocusCB);
+                    MainActivity.this.scaneibarcode.setText(scanBarcodeString);
+
                     MainActivity.this.ESLType = 0;
+                }
+
+
+                MainActivity.this.scanButton.setText(scanBarcodeString);
+                MainActivity.this.mCamera.setPreviewCallback(MainActivity.this.previewCb);
+                MainActivity.this.mCamera.startPreview();
+                MainActivity.this.previewing = true;
+
+                if (MainActivity.this.oldAutoFocusMode) {
+                    MainActivity.this.mCamera.autoFocus(MainActivity.this.autoFocusCB);
                 }
             }
         });
@@ -1249,8 +1272,8 @@ public class MainActivity extends Activity {
         ((TextView) MainActivity.this.findViewById(R.id.tv_nb_repeat)).setText("Frames repeated " + (nbRepeatFrame) + " time" + (p) + " (Lower is faster but less reliable !)");
         nbRepeatControl.setProgress(nbRepeatFrame - 1);
 
-        this.rawmode = this.settings.getInt("rawmode", 0);
-        if (this.rawmode == 1) {
+        this.rawmode_forced = this.settings.getBoolean("rawmode_forced", false);
+        if (this.rawmode_forced) {
             ((CheckBox) findViewById(R.id.force_raw_sending_mode)).setChecked(true);
         }
 
@@ -1348,6 +1371,9 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 Button btnsend = (Button) v;
                 String buttonText = btnsend.getText().toString();
+
+                String cancelText = "Cancel now";
+
                 if (buttonText.equals("Send image")) {
                     if (!isDonglePaired()) {
                         return;
@@ -1363,15 +1389,24 @@ public class MainActivity extends Activity {
                     }
 
                     MainActivity.this.threadRunning = true;
-                    btnsend.setText("Stop send");
-                    convertImage();
+                    btnsend.setText(cancelText);
+                    convertAndSendImage();
                 }
-                else if (buttonText.equals("Stop send")) {
+                else if (buttonText.equals(cancelText)) {
                     MainActivity.this.threadRunning = false;
                     //SystemClock.sleep(200);
-                    btnsend.setText("Send image");
-                    MainActivity.this.txtworkh.setText("Stopped successfully !");
-                    MainActivity.this.pgb.setProgress(100);
+                    new Timer().schedule(new TimerTask() {
+                        public void run() {
+                            MainActivity.this.runOnUiThread(new Runnable() {
+                                public void run() {
+                                    MainActivity.this.btnsendimg.setText("Send image");
+                                    MainActivity.this.txtworkh.setText("Transmission cancelled !");
+                                    MainActivity.this.pgb.setProgress(100);
+                                }
+                            });
+                        }
+                    }, 200);
+
                 }
             }
         });
@@ -1430,6 +1465,26 @@ public class MainActivity extends Activity {
                 }
             }
         });
+
+        RadioGroup radppmversion = findViewById(R.id.ppmversion);
+        radppmversion.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                MainActivity.this.pp16Mode = checkedId == R.id.radpp16;
+                Editor editor = getSharedPreferences("Pricehax", 0).edit();
+                editor.putBoolean("pp16Mode", MainActivity.this.pp16Mode);
+                editor.commit();
+            }
+        });
+
+        radppmversion.check(R.id.radpp16);
+
+        this.pp16Mode = this.settings.getBoolean("pp16Mode", true);
+        if (!this.pp16Mode) {
+            radppmversion.check(R.id.radpp4c);
+        }
+
     }
 
     @Override
@@ -1484,12 +1539,15 @@ public class MainActivity extends Activity {
                         this.autoFocusHandler = new Handler();
                         this.mCamera = getCameraInstance();
                         Parameters params = this.mCamera.getParameters();
-                        params.setPreviewSize(640, 480);
                         this.mCamera.setParameters(params);
                         this.mPreview = new CameraPreview(this, this.mCamera, this.previewCb, this.autoFocusCB);
+                        this.oldAutoFocusMode = this.mPreview.isOldAutoFocusMode();
                         this.preview = (FrameLayout) findViewById(R.id.cameraPreview);
                         this.preview.addView(this.mPreview);
-                        this.mCamera.autoFocus(MainActivity.this.autoFocusCB);
+
+                        if (this.oldAutoFocusMode) {
+                            this.mCamera.autoFocus(this.autoFocusCB);
+                        }
                     }
                     catch (RuntimeException e) {
                         e.printStackTrace();
@@ -1503,9 +1561,9 @@ public class MainActivity extends Activity {
                 this.autoFocusHandler = new Handler();
                 this.mCamera = getCameraInstance();
                 Parameters params = this.mCamera.getParameters();
-                params.setPreviewSize(640, 480);
                 this.mCamera.setParameters(params);
                 this.mPreview = new CameraPreview(this, this.mCamera, this.previewCb, this.autoFocusCB);
+                this.oldAutoFocusMode = this.mPreview.isOldAutoFocusMode();
                 this.preview = (FrameLayout) findViewById(R.id.cameraPreview);
                 this.preview.addView(this.mPreview);
             }
@@ -1522,9 +1580,9 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void doAutoFocusOnTouch(View view) {
-        if (this.previewing == true) {
-            this.mCamera.autoFocus(MainActivity.this.autoFocusCB);
+    public void doOldAutoFocusOnTouch(View view) {
+        if (this.previewing && this.oldAutoFocusMode) {
+            this.mCamera.autoFocus(this.autoFocusCB);
         }
     }
 
@@ -1543,14 +1601,11 @@ public class MainActivity extends Activity {
     }
 
     public void setrawmode(View view) {
-        if (((CheckBox) findViewById(getResources().getIdentifier("force_raw_sending_mode", "id", getPackageName()))).isChecked()) {
-            this.rawmode = 1;
-        } else {
-            this.rawmode = 0;
-        }
+        CheckBox cbForceRawMode = findViewById(getResources().getIdentifier("force_raw_sending_mode", "id", getPackageName()));
+        this.rawmode_forced = cbForceRawMode.isChecked();
 
         Editor editor = MainActivity.this.getSharedPreferences("Pricehax", 0).edit();
-        editor.putInt("rawmode", this.rawmode);
+        editor.putBoolean("rawmode_forced", this.rawmode_forced);
         editor.commit();
     }
 
@@ -1647,9 +1702,12 @@ public class MainActivity extends Activity {
             return;
         }
         this.repeatModeDM = ((CheckBox) findViewById(R.id.chkrepeatdm)).isChecked();
-        int timerPeriod = 4500;
+        int timerPeriod = 3900;
+        if (MainActivity.this.pp16Mode) timerPeriod = 3600;
+
+        // Shorter timer period for green led flash
         if (((RadioButton) findViewById(R.id.raddur10)).isChecked() || ((RadioButton) findViewById(R.id.raddur11)).isChecked()) {
-            timerPeriod = 2000;
+            timerPeriod = 1500;
         }
         if (this.repeatModeDM) {
             if (this.timer != null) {
@@ -1707,7 +1765,10 @@ public class MainActivity extends Activity {
                 byte[] hcode = new byte[18];
                 int dispDuration = 0;
                 int dispDMDuration = 0;
+
                 int nbrepeat = 400;
+                if (MainActivity.this.pp16Mode) nbrepeat *= 2;
+
                 EditText metxtPage = (EditText) findViewById(R.id.etxtPage);
                 if (metxtPage.getText() == null) {
                     metxtPage.setText("0");
@@ -1753,21 +1814,25 @@ public class MainActivity extends Activity {
                     hcode[6] = (byte) 243;
                     dispDMDuration = (dispDMPage[0] & 15);
                 } else if (dispDuration == 10) {
-                    hcode[1] = (byte) ((int) (MainActivity.this.plID & 255));
-                    hcode[2] = (byte) ((int) (MainActivity.this.plID >> 8));
-                    hcode[3] = (byte) ((int) (MainActivity.this.plID >> 16));
-                    hcode[4] = (byte) ((int) (MainActivity.this.plID >> 24));
+                    //hcode[1] = (byte) ((int) (MainActivity.this.plID & 255));
+                    //hcode[2] = (byte) ((int) (MainActivity.this.plID >> 8));
+                    //hcode[3] = (byte) ((int) (MainActivity.this.plID >> 16));
+                    //hcode[4] = (byte) ((int) (MainActivity.this.plID >> 24));
                     hcode[6] = (byte) 73;
                     dispDMDuration = (dispDMPage[0] & 15);
+
                     nbrepeat = 150;
+                    if (MainActivity.this.pp16Mode) nbrepeat *= 2;
                 } else if (dispDuration == 11) {
-                    hcode[1] = (byte) ((int) (MainActivity.this.plID & 255));
-                    hcode[2] = (byte) ((int) (MainActivity.this.plID >> 8));
-                    hcode[3] = (byte) ((int) (MainActivity.this.plID >> 16));
-                    hcode[4] = (byte) ((int) (MainActivity.this.plID >> 24));
+                    //hcode[1] = (byte) ((int) (MainActivity.this.plID & 255));
+                    //hcode[2] = (byte) ((int) (MainActivity.this.plID >> 8));
+                    //hcode[3] = (byte) ((int) (MainActivity.this.plID >> 16));
+                    //hcode[4] = (byte) ((int) (MainActivity.this.plID >> 24));
                     hcode[6] = (byte) 201;
                     dispDMDuration = (dispDMPage[0] & 15);
+
                     nbrepeat = 150;
+                    if (MainActivity.this.pp16Mode) nbrepeat *= 2;
                 } else {
                     hcode[6] = (byte) (((dispDMPage[0] & 15) << 3) | 1);
                 }
@@ -1778,7 +1843,7 @@ public class MainActivity extends Activity {
                 byte[] FrameCRC = CRCCalc.GetCRC(hcode, 11);
                 hcode[11] = FrameCRC[0];
                 hcode[12] = FrameCRC[1];
-                PP4C.sendPP4C(getApplicationContext(), hcode, 13, MainActivity.this.donglever, 60, audioTrack, nbrepeat);
+                PPM.sendPPM(MainActivity.this, hcode, MainActivity.this.pp16Mode, 13, MainActivity.this.donglever, 60, audioTrack, nbrepeat);
             }
         }).start();
     }
@@ -1795,7 +1860,7 @@ public class MainActivity extends Activity {
         byte[] FrameCRC = CRCCalc.GetCRC(hcode, 28);
         hcode[28] = FrameCRC[0];
         hcode[29] = FrameCRC[1];
-        PP4C.sendPP4C(getApplicationContext(), hcode, 30, this.donglever, 60, audioTrack, 0);
+        PPM.sendPPM(MainActivity.this, hcode, MainActivity.this.pp16Mode, 30, this.donglever, 60, audioTrack, 0);
         plHexString = "";
         for (int cp = 0; cp < 30; cp++) {
             plHexString = plHexString + String.format("%02X", new Object[]{Byte.valueOf(hcode[cp])});
@@ -1835,7 +1900,7 @@ public class MainActivity extends Activity {
                     byte[] FrameCRC = CRCCalc.GetCRC(hcode, 9);
                     hcode[9] = FrameCRC[0];
                     hcode[10] = FrameCRC[1];
-                    PP4C.sendPP4C(getApplicationContext(), hcode, 11, MainActivity.this.donglever, 60, audioTrack, 100);
+                    PPM.sendPPM(MainActivity.this, hcode, false, 11, MainActivity.this.donglever, 60, audioTrack, 100);
                 }
             }
         }).start();
@@ -1899,7 +1964,7 @@ public class MainActivity extends Activity {
                         ((TextView) findViewById(R.id.label_dbgbs)).setText("Segment bitstream: " + plHexString);
                     }
                 });
-                PP4C.sendPP4C(getApplicationContext(), hcode, 43, MainActivity.this.donglever, 15, audioTrack, 100);
+                PPM.sendPPM(MainActivity.this, hcode, false, 43, MainActivity.this.donglever, 15, audioTrack, 100);
             }
         }).start();
     }
@@ -1946,6 +2011,6 @@ public class MainActivity extends Activity {
             plHexString = plHexString + String.format("%02X", new Object[]{Byte.valueOf(hcode[cp])});
         }
         ((TextView) findViewById(R.id.label_dbgbs)).setText("Data update: " + plHexString);
-        PP4C.sendPP4C(getApplicationContext(), hcode, 43, this.donglever, 15, audioTrack, 0);
+        PPM.sendPPM(MainActivity.this, hcode, false, 43, this.donglever, 15, audioTrack, 0);
     }
 }

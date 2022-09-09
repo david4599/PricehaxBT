@@ -33,14 +33,50 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="8.0dip"
             android:layout_marginTop="8.0dip"
+            android:layout_marginBottom="16.0dip"
             android:text="Segment bitstream: "
             android:textColor="@color/textcolor" />
+
+        <TextView
+            android:id="@+id/tvppmversion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/label_dbgbs"
+            android:layout_centerHorizontal="true"
+            android:text="PPM mode for DotMatrix ESLs:"
+            android:textColor="@color/textcolor" />
+
+        <RadioGroup
+            android:id="@+id/ppmversion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvppmversion"
+            android:layout_marginTop="8.0dip"
+            android:layout_marginBottom="32.0dip"
+            android:layout_centerHorizontal="true">
+
+            <RadioButton
+                android:id="@+id/radpp16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="PP16 (faster)"
+                android:textColor="@color/textcolor" />
+
+            <RadioButton
+                android:id="@+id/radpp4c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PP4C"
+                android:textColor="@color/textcolor" />
+        </RadioGroup>
+
 
         <CheckBox
             android:id="@id/chk_donglever"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/label_dbgbs"
+            android:layout_below="@id/ppmversion"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="25.0dip"
             android:checked="true"
@@ -117,7 +153,7 @@
             android:id="@+id/btnPairBT"
             android:layout_below="@id/tvbtt"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:onClick="pairBTTransmitter"
             android:textColor="@color/textcolor" />
     </RelativeLayout>

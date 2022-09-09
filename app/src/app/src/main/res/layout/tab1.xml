@@ -112,7 +112,7 @@
                 android:id="@id/raddur7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="40dp"
                 android:text="1h30"
                 android:textColor="@color/textcolor" />
 
@@ -120,7 +120,7 @@
                 android:id="@id/raddur8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Display debug infos"
+                android:text="Show debug infos *"
                 android:textColor="@color/textcolor"
                 android:textSize="12.0sp" />
 
@@ -129,7 +129,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:text="Hide debug infos"
+                android:text="Hide debug infos *"
                 android:textColor="@color/textcolor"
                 android:textSize="12.0sp" />
 
@@ -137,7 +137,7 @@
                 android:id="@id/raddur10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="SmartTag LED low flash *"
+                android:text="SmartTag LED weak flash **"
                 android:textColor="@color/textcolor"
                 android:textSize="12.0sp" />
 
@@ -148,7 +148,7 @@
                 android:layout_below="@id/chkrepeatdm"
                 android:layout_alignStart="@id/radgDurations"
                 android:layout_alignLeft="@id/radgDurations"
-                android:text="SmartTag LED high flash *"
+                android:text="SmartTag LED strong flash **"
                 android:textColor="@color/textcolor"
                 android:textSize="12.0sp" />
         </RadioGroup>
@@ -207,14 +207,25 @@
             android:textColor="@color/textcolor" />
 
         <TextView
-            android:id="@id/txtvledflash"
+            android:id="@id/txtdebug"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/radgDurations"
             android:layout_alignLeft="@id/txtvPageDur"
             android:layout_alignRight="@id/button2"
             android:layout_marginTop="16.0dip"
-            android:text="* Not working yet on some SmartTag ESLs"
+            android:text="* DotMatrix ESLs only"
+            android:textColor="@color/textcolor"
+            android:textSize="11.0sp" />
+
+        <TextView
+            android:id="@id/txtvledflash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtdebug"
+            android:layout_alignLeft="@id/txtvPageDur"
+            android:layout_alignRight="@id/button2"
+            android:text="** Not working yet on some SmartTag ESLs"
             android:textColor="@color/textcolor"
             android:textSize="11.0sp" />
 
@@ -226,7 +237,7 @@
             android:layout_alignLeft="@id/txtvPageDur"
             android:layout_alignRight="@id/button2"
             android:layout_marginTop="6.0dip"
-            android:text="Use the 'Page number' field to define the number of times the LED will flash (0 = always)"
+            android:text="Use the 'Page number' field to define the number of times the LED will flash (between 1 and 9, 0 = always)"
             android:textColor="@color/textcolor"
             android:textSize="11.0sp" />
     </RelativeLayout>

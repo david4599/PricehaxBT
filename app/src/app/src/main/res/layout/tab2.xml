@@ -17,11 +17,11 @@
             android:layout_height="192.0dip"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="8.0dip"
-            android:onClick="doAutoFocusOnTouch"/>
+            android:onClick="doOldAutoFocusOnTouch"/>
 
         <Button
             android:id="@id/scan_button"
-            android:layout_width="200.0dip"
+            android:layout_width="264.0dip"
             android:layout_height="50.0dip"
             android:layout_below="@id/cameraPreview"
             android:layout_centerHorizontal="true"

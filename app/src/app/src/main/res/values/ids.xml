@@ -127,4 +127,5 @@
     <item type="id" name="txtwork" />
     <item type="id" name="force_raw_sending_mode" />
     <item type="id" name="action_settings" />
+    <item type="id" name="txtdebug" />
 </resources>
