@@ -1,19 +1,31 @@
 # Pricehax BT
 Prototype of the ESL hack project done by Furrtek (https://github.com/furrtek/PrecIR) using the Pricehax BT Android app, Arduino Nano board and HC-06 (or HC-05) module for Bluetooth communication.
 
-**Disclaimer:** Only for educational purposes and fun. Both Furrtek and I decline all responsability for any kind of issues related to an illegal use of this repo. Be smart, the prices in the store's database will not change, you have been warned.
+**Disclaimer:** For educational purposes and fun only. Both Furrtek and I decline all responsability for any kind of issues related to an illegal use of this repo. Be smart, the prices in the store's database won't change, you have been warned.
 
-Videos about this project are archived in this [playlist](https://www.youtube.com/playlist?list=PLhEz48id1qqD27sRc73mDFfBpu_RcLxfZ) (most in French).
+Furrtek's videos of this project are archived in this [playlist](https://www.youtube.com/playlist?list=PLhEz48id1qqD27sRc73mDFfBpu_RcLxfZ) (most in French, auto-translated subtitles are enabled but they are far from perfect).
 
 <img src="PricehaxBT.jpg" width="640" alt="PricehaxBT">
 
 ## Build
 - Create the dongle on breadboard following the schematic (or order the pcb and solder the components)
-- Using the AT commands, change the name of the HC-05/HC-06 module to "PRICEHAX TX V3" and its baudrate to 57600bps (115200bps and more will not work because of the SoftwareSerial library usage that produces errors at those rates)
+- Using the AT commands, change the name of the HC-05/HC-06 module to "PRICEHAX TX V3" and its baudrate to 115200bps
 - Program the arduino nano with the included sketch
 - Download and install the [Android app](https://github.com/david4599/PricehaxBT/releases/latest), pair the dongle and enjoy ;-)
 
 ## Android app changelog
+
+### Version 1.3 (21)
+
+**Features**
+- Added PP16 IR Protocol support (not full speed, see [Notes](https://github.com/david4599/PricehaxBT#notes)): [speed comparison video](https://youtu.be/DFfLOQh_ERs)
+- Updated camera autofocus handling by using continuous focus modes if available
+- Improved Bluetooth transmission reliability: the whole data (Pricehax header + PPM frame) is sent to the dongle with a basic checksum instead of using the PPM frame CRC that won't verify the header
+
+**Fixes**
+- Fixed bug that was sometimes stopping the image transmission just after the wake-up frame
+- Fixed camera preview rotation in reverse landscape and reverse portrait orientations
+- Fixed waiting time when sending an image in 2 parts (due to 64kB limit)
 
 ### Version 1.2 (20)
 
@@ -57,8 +69,9 @@ Videos about this project are archived in this [playlist](https://www.youtube.co
 - Fixed some bugs and app crashes
 
 ## Notes
-- I didn't write the app, I only decompiled the sources from the apk (that's why the code is a bit of a mess). Then, I imported them on Android Studio and fixed the decompilation errors preventing the re-compilation
-- The app supports only Bluetooth communication, the original communication using audio has been disabled (not the goal of this repo)
+- The implemented PP4C and PP16 protocols are not transmitting data at their maximum speeds. In theory, they should be around 10kbps for PP4C and 38kbps for PP16 (in reality, they are measured at 9kbps and 31kbps). Pricehax BT seems to do only 6kbps and 11kbps if my calculations are correct
+- I didn't write the app, I just decompiled the sources from the apk (that's why the code is a bit of a mess). Then, I imported them on Android Studio and fixed the decompilation errors preventing the re-compilation
+- The app supports Bluetooth communication only, the original communication using audio has been disabled (not the goal of this repo)
 - Furrtek did code the Bluetooth feature in the original app, I just made some changes so the feature works with my dongle
 - I am not a programming or electronic expert, so the code and the schematic might be better...
 
