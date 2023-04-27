@@ -226,6 +226,11 @@ public class MainActivity extends Activity {
                 MainActivity.this.ESLType = 1;
                 break;
 
+            case 1243:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E4 HCN FZ)");
+                MainActivity.this.plBitDef = 0;
+                MainActivity.this.ESLType = 1;
+                break;
 
             case 1217:
             case 1628:
