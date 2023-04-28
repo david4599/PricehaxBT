@@ -240,6 +240,14 @@ public class MainActivity extends Activity {
                 MainActivity.this.ESLType = 2;
                 MainActivity.this.ESLTypeColor = true;
                 break;
+            case 1627:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Support for 1627 296x128) EXPERIMENTAL");
+                MainActivity.this.wi = 296;
+                MainActivity.this.hi = 128;
+                MainActivity.this.ESLType = 2;
+                MainActivity.this.ESLTypeColor = true;
+                break;
+
             case 1265:
                 MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E5 HCS)");
                 MainActivity.this.plBitDef = 2;
