@@ -15,7 +15,7 @@ Furrtek's videos of this project are archived in this [playlist](https://www.you
 
 ## Android app changelog
 
-### Version 1.4-1.4.1
+### Version 1.4
 
 Added support for:
 1628 (B407047372716287)
