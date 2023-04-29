@@ -15,6 +15,14 @@ Furrtek's videos of this project are archived in this [playlist](https://www.you
 
 ## Android app changelog
 
+### Version 1.4-1.4.1
+
+Added support for:
+1628 (B407047372716287)
+1639 (a406048236716396)
+1243 Continuum HCN Freezer (F45324224927123434)
+1627 (d4611412853816278)
+
 ### Version 1.3 (21)
 
 **Features**
