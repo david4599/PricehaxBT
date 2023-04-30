@@ -19,9 +19,9 @@ Furrtek's videos of this project are archived in this [playlist](https://www.you
 
 Added support for:
 - 1628 (B407047372716287)
-- 1639 (a406048236716396)
+- 1639 (A406048236716396)
 - 1243 Continuum HCN Freezer (F45324224927123434)
-- 1627 (d4611412853816278)
+- 1627 (D4611412853816278)
 
 ### Version 1.3 (21)
 
