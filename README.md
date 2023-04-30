@@ -11,17 +11,17 @@ Furrtek's videos of this project are archived in this [playlist](https://www.you
 - Create the dongle on breadboard following the schematic (or order the pcb and solder the components)
 - Using the AT commands, change the name of the HC-05/HC-06 module to "PRICEHAX TX V3" and its baudrate to 115200bps
 - Program the arduino nano with the included sketch
-- Download and install the [Android app](https://github.com/david4599/PricehaxBT/releases/latest), pair the dongle and enjoy ;-)
+- Download and install the [Android app](https://github.com/dandri/PricehaxBT/releases/latest), pair the dongle and enjoy ;-)
 
 ## Android app changelog
 
 ### Version 1.4
 
 Added support for:
-1628 (B407047372716287)
-1639 (a406048236716396)
-1243 Continuum HCN Freezer (F45324224927123434)
-1627 (d4611412853816278)
+- 1628 (B407047372716287)
+- 1639 (a406048236716396)
+- 1243 Continuum HCN Freezer (F45324224927123434)
+- 1627 (d4611412853816278)
 
 ### Version 1.3 (21)
 
