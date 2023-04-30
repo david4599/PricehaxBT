@@ -307,7 +307,7 @@ public class MainActivity extends Activity {
 
 
             case 1315:
-                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L 296x128) EXPERIMENTAL");
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L 296x128)");
                 MainActivity.this.wi = 296;
                 MainActivity.this.hi = 128;
                 MainActivity.this.ESLType = 2;
