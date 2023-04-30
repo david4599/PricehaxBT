@@ -221,6 +221,10 @@ public class MainActivity extends Activity {
                 MainActivity.this.ESLType = 1;
                 break;
             case 1242:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E4 HCN FZ)");
+                MainActivity.this.plBitDef = 0;
+                MainActivity.this.ESLType = 1;
+                break;
             case 1243:
                 MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E4 HCW (18410-00) segments bitmap not done !)");
                 MainActivity.this.ESLType = 1;
