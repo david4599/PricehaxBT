@@ -225,7 +225,10 @@ public class MainActivity extends Activity {
                 MainActivity.this.plBitDef = 0;
                 MainActivity.this.ESLType = 1;
                 break;
-
+            case 1243:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E4 HCW (18410-00) segments bitmap not done !)");
+                MainActivity.this.ESLType = 1;
+                break;
 
             case 1217:
             case 1265:
@@ -280,13 +283,6 @@ public class MainActivity extends Activity {
                 MainActivity.this.hi = 152;
                 MainActivity.this.ESLType = 2;
                 break;
-            case 1339:
-                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD S Red 152x152) EXPERIMENTAL");
-                MainActivity.this.wi = 152;
-                MainActivity.this.hi = 152;
-                MainActivity.this.ESLType = 2;
-                MainActivity.this.ESLTypeColor = true;
-                break;
 
 
             case 1318:
@@ -311,7 +307,7 @@ public class MainActivity extends Activity {
 
 
             case 1315:
-                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L 296x128) EXPERIMENTAL");
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L 296x128)");
                 MainActivity.this.wi = 296;
                 MainActivity.this.hi = 128;
                 MainActivity.this.ESLType = 2;
@@ -320,6 +316,14 @@ public class MainActivity extends Activity {
             case 1370: // 2021 revision of the SmartTag HD L Red 296x128 - black housing
             case 1328:
                 MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L Red 296x128)");
+                MainActivity.this.wi = 296;
+                MainActivity.this.hi = 128;
+                MainActivity.this.ESLType = 2;
+                MainActivity.this.ESLTypeColor = true;
+                break;
+            case 1627:
+            case 1628:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L Red 296x128) ");
                 MainActivity.this.wi = 296;
                 MainActivity.this.hi = 128;
                 MainActivity.this.ESLType = 2;
@@ -363,7 +367,14 @@ public class MainActivity extends Activity {
                 MainActivity.this.ESLType = 2;
                 MainActivity.this.ESLTypeColor = true;
                 break;
-
+            case 1339:
+            case 1639:
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD S Red 152x152) ");
+                MainActivity.this.wi = 152;
+                MainActivity.this.hi = 152;
+                MainActivity.this.ESLType = 2;
+                MainActivity.this.ESLTypeColor = true;
+                break;
 
             case 1351:
                 MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD150 648x480) EXPERIMENTAL");
