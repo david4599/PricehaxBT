@@ -222,8 +222,7 @@ public class MainActivity extends Activity {
                 break;
             case 1242:
             case 1243:
-                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E4 HCN FZ)");
-                MainActivity.this.plBitDef = 0;
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (Continuum E4 HCW (18410-00) segments bitmap not done !)");
                 MainActivity.this.ESLType = 1;
                 break;
 
@@ -327,7 +326,7 @@ public class MainActivity extends Activity {
                 break;
             case 1627:
             case 1628:
-                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L Red 296x128) EXPERIMENTAL");
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD L Red 296x128) ");
                 MainActivity.this.wi = 296;
                 MainActivity.this.hi = 128;
                 MainActivity.this.ESLType = 2;
@@ -373,7 +372,7 @@ public class MainActivity extends Activity {
                 break;
             case 1339:
             case 1639:
-                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD S Red 152x152) EXPERIMENTAL");
+                MainActivity.this.scaneitype.setText("Type: " + MainActivity.this.PLType + " (SmartTag HD S Red 152x152) ");
                 MainActivity.this.wi = 152;
                 MainActivity.this.hi = 152;
                 MainActivity.this.ESLType = 2;
